@@ -27,7 +27,7 @@ def login(data: LoginSchema, db: Session = Depends(get_db)):
     )
     refresh_token = create_refresh_token(
         data={"sub": str(user.id)},
-        expires_delta=timedelta(minutes=15)
+        expires_delta=timedelta(days=5)
     )
 
     return {
@@ -44,7 +44,7 @@ def register(user_data: UserRegisterSchema, db: Session = Depends(get_db)):
 
     user = User(
         email=user_data.email,
-        password= hash_password(user_data.password),
+        password=hash_password(user_data.password),
         city=user_data.city,
         country=user_data.country,
         phone_number=user_data.phone_number,
@@ -59,11 +59,11 @@ def register(user_data: UserRegisterSchema, db: Session = Depends(get_db)):
     db.refresh(user)
 
     access_token = create_access_token(
-        data={"user_id": str(user.id)},
+        data={"sub": str(user.id)},
         expires_delta=timedelta(minutes=15)
     )
     refresh_token = create_refresh_token(
-        data={"user_id": str(user.id)},
+        data={"sub": str(user.id)},
         expires_delta=timedelta(days=5)
     )
 
@@ -79,13 +79,12 @@ def register(user_data: UserRegisterSchema, db: Session = Depends(get_db)):
 def refresh_token(refresh_token: str):
     try:
         payload = jwt.decode(refresh_token, SECRET_KEY, algorithms=[ALGORITHM])
-        user_id = payload.get("user_id")
+        user_id = payload.get("sub")
         if user_id is None:
             raise HTTPException(status_code=401, detail="Invalid refresh token")
-        new_token = create_access_token({"user_id": user_id})
+        new_token = create_access_token({"sub": user_id})
         return {"access_token": new_token, "token_type": "bearer"}
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid refresh token")
-
 
 

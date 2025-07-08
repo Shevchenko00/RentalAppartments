@@ -80,9 +80,9 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer',),
     'ALGORITHM': 'HS256',
-    'SIGNING_KEY': 'your-secret-key',
+    'SIGNING_KEY': os.getenv('SECRET_KEY'),
     'USER_ID_FIELD': 'id',
-    'USER_ID_CLAIM': 'user_id',
+    'USER_ID_CLAIM': 'sub',
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
 }
 
@@ -124,10 +124,10 @@ AUTH_USER_MODEL = 'users.User'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-if env.bool('MYSQL', default=False):
+if env.bool('DB', default=False):
     DATABASES = {
         'default': {
-            'ENGINE': ("django.db.backends.mysql"),
+            'ENGINE': ("django.db.backends.postgresql"),
             'NAME': env('DB_NAME', default='django_final_projects'),
             'USER': env('DB_USER', default='root'),
             'PASSWORD': env('DB_PASSWORD', default='akula123'),
