@@ -1,0 +1,52 @@
+.page_wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+
+  background-image: url("/images/background.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 20px; /* чтоб на мобиле не прилипала к краям */
+}
+
+.register_container {
+  width: 100%;
+  max-width: 450px;
+  padding: 30px 25px;
+  border-radius: 15px;
+  background-color: rgba(0, 0, 0, 0.8); /* чуть темнее фон, чтобы текст лучше читался */
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.register_form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.link_to_login {
+  display: block;
+  margin: 25px auto 0 auto;
+  width: fit-content;
+  color: #80caff;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #4da3ff;
+  }
+}
+
+@media (max-width: 600px) {
+  .register_container {
+    padding: 25px 15px;
+    max-width: 90vw;
+  }
+}

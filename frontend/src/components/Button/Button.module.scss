@@ -1,0 +1,24 @@
+.button {
+  display: block;
+  width: 30%;
+  margin: 20px auto;
+  padding: 10px;
+  border: none;
+  border-radius: 15px;
+  background-color: #0070f3;
+  color: white;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: background-color 0.25s ease;
+  cursor: pointer;
+  &:hover {
+    opacity: 80%;
+  }
+  &:active {
+    transform: scale(0.97);
+    background-color: #005bb5;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+}
+
+@media (max-width: 600px) {    .button {     font-size: 1rem;   } }
