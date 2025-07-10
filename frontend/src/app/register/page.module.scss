@@ -8,7 +8,7 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  padding: 20px; /* чтоб на мобиле не прилипала к краям */
+  padding: 20px;
 }
 
 .authorization_container {
@@ -16,7 +16,7 @@
   max-width: 450px;
   padding: 30px 25px;
   border-radius: 15px;
-  background-color: rgba(0, 0, 0, 0.9); /* чуть темнее фон, чтобы текст лучше читался */
+  background-color: rgba(0, 0, 0, 0.9);
 
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   color: white;
@@ -43,6 +43,14 @@
     color: #4da3ff;
   }
 }
+
+.error_message {
+  color: red;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+
 
 @media (max-width: 600px) {
   .authorization_container {

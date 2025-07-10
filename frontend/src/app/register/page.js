@@ -3,7 +3,7 @@ import Input from "@/components/Input/Input";
 import * as styles from './page.module.scss'
 import Button from "@/components/Button/Button";
 import Link from 'next/link';
-import MotionForPage from "@/components/uttils/MotionForPage/MotionForPage";
+import MotionForPage from "@/uttils/MotionForPage/MotionForPage";
 import {useState} from "react";
 import registerSchema from "@/schemas/auth.schema";
 import Checkbox from "@/components/Checkbox/Checkbox";
@@ -49,7 +49,6 @@ const RegisterPage = () => {
         if (!result.success) {
             const fieldErrors = result.error.flatten().fieldErrors;
             setErrors(fieldErrors);
-            return;
         }
 
         setErrors({});

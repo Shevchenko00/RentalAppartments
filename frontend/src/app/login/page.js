@@ -3,62 +3,83 @@ import * as styles from "@/app/register/page.module.scss";
 import Input from "@/components/Input/Input";
 import Button from "@/components/Button/Button";
 import Link from "next/link";
-import MotionForPage from "@/components/uttils/MotionForPage/MotionForPage";
+import MotionForPage from "@/uttils/MotionForPage/MotionForPage";
 import {useState} from "react";
-import registerSchema from "@/schemas/auth.schema";
-
+import registerSchema, {loginSchema} from "@/schemas/auth.schema";
+import { loginUser } from '@/api/auth';
 
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({});
+    const [JSONError, setJSONError] = useState({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleSubmit = (e) => {
+
+    const handleSubmitLogin = async (e) => {
         e.preventDefault();
+        setIsSubmitting(true);
 
-        const formData = {
-            email,
-            password,
+        try {
+            const result = registerSchema.safeParse({ email, password });
 
-        };
+            if (!result.success) {
+                const fieldErrors = result.error.flatten().fieldErrors;
+                setErrors(fieldErrors);
+            }
 
-        const parsedFormData = {
-            ...formData
-        };
+            const data = await loginUser({ email, password });
 
-        const result = registerSchema.safeParse(parsedFormData);
+            document.cookie = `access_token=${data.access_token}; path=/; secure`;
+            document.cookie = `refresh_token=${data.refresh_token}; path=/; secure`;
 
-        if (!result.success) {
-            const fieldErrors = result.error.flatten().fieldErrors;
-            setErrors(fieldErrors);
-            return;
+            setErrors({});
+            setJSONError({})
+
+        } catch (err) {
+
+            if (typeof err === 'object' && err.detail) {
+                setJSONError(err);
+            } else {
+                setJSONError({ detail: 'Unknown error while logging in.' });
+            }
+        } finally {
+            setIsSubmitting(false);
         }
-
-        setErrors({});
-        const validData = result.data;
-        console.log("Validated form data:", validData);
     };
 
-    return(
-        <>
-            <MotionForPage>
-                <form onSubmit={handleSubmit}>
-                    <div className={styles.page_wrapper}>
-                        <div className={styles.authorization_container} >
-                            <h1>Welcome Back!</h1>
-                            <Input onchange={(e) => setEmail(e.target.value)} error={errors.email} value={email} helpText={'Login or Email'} type={'text'}/>
-                            <Input  onchange={(e) => setPassword(e.target.value)} error={errors.password} value={password} helpText={'Password'} type={'password'}/>
-                            <Button type={'submit'} text={'submit'}/>
-                            <Link href="/register" className={styles.link_to_login}>
-                                Don't have a account?
-                            </Link>
+    const isEmailValid = loginSchema().safeParse({ email, password }).success;
+    const isDisabled = !email || !password || !isEmailValid;
+
+
+
+    return (
+            <>
+                <MotionForPage>
+                    <form onSubmit={handleSubmitLogin}>
+                        <div className={styles.page_wrapper}>
+                            <div className={styles.authorization_container}>
+                                <h1>Welcome Back!</h1>
+                                <Input onchange={(e) => setEmail(e.target.value)} error={errors.email} value={email}
+                                       helpText={'Email'} type={'text'}/>
+                                <Input onchange={(e) => setPassword(e.target.value)} error={errors.password}
+                                       value={password} helpText={'Password'} type={'password'}/>
+                                <Button disabled={isDisabled} type={'submit'} text={'submit'}/>
+                                <Link href="/register" className={styles.link_to_login}>
+                                    Don't have a account?
+                                </Link>
+                                {typeof JSONError?.detail === 'string' && JSONError.detail.trim() !== '' && (
+                                    <p className={styles.error_message}>{JSONError.detail}</p>
+                                )}
+
+
+                            </div>
                         </div>
-                    </div>
-                </form>
-            </MotionForPage>
+                    </form>
+                </MotionForPage>
             </>
-    );
-}
+        );
+    }
 
 export default Login;
