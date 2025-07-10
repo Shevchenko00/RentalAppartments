@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+
+.button {   padding: 12px;   font-size: 1.1rem;   font-weight: 700;   background-color: #137df5;   border: none;   border-radius: 15px;   margin: 0 auto;   color: white;   cursor: pointer;   transition: background-color 0.25s ease;    &:hover {     background-color: #3787e6;   }    &:active {     background-color: #2b65ba;   } }  @media (max-width: 600px) {    .button {     font-size: 1rem;   } }

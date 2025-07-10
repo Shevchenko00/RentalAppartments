@@ -1,8 +1,18 @@
 import * as styles from './Input.module.scss'
 
-const Input = ({helpText, type, maxLength}) => {
+const Input = ({helpText, type, maxLength, onchange, error, value}) => {
     return  (
-        <input className={styles.Input} placeholder={helpText} type={type} maxLength={maxLength}/>
+        <>
+            <label>{helpText}</label>
+            <input
+                className={styles.Input}
+                type={type}
+                maxLength={maxLength}
+                onChange={onchange}
+                value={value}
+            />
+            {error && <p style={{ color: 'red', fontSize: '0.8rem' }}>{error.join('. ')}</p>}
+        </>
     );
 }
 

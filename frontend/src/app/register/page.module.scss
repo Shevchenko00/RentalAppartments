@@ -11,7 +11,7 @@
   padding: 20px; /* чтоб на мобиле не прилипала к краям */
 }
 
-.register_container {
+.authorization_container {
   width: 100%;
   max-width: 450px;
   padding: 30px 25px;
@@ -23,7 +23,7 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.register_form {
+.authorization_form {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -45,7 +45,7 @@
 }
 
 @media (max-width: 600px) {
-  .register_container {
+  .authorization_container {
     padding: 25px 15px;
     max-width: 90vw;
   }
