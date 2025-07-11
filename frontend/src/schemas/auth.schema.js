@@ -8,9 +8,17 @@ export const registerSchema = z
 
         password: z
             .string({ required_error: "Password is required" })
-            .min(8, "Minimum 8 characters"),
+            .min(8, "Minimum 8 characters")
+            .refine(
+                (val) => /[A-Z]/.test(val),
+                { message: "Password must contain at least one uppercase letter" }
+            )
+            .refine(
+                (val) => /\d/.test(val),
+                { message: "Password must contain at least one number" }
+            ),
 
-        confirmPassword: z
+        repeat_password: z
             .string({ required_error: "Confirm password is required" })
             .nonempty("Confirm password is required"),
 
@@ -18,13 +26,13 @@ export const registerSchema = z
             .string({ required_error: "Country is required" })
             .nonempty("Country is required"),
 
-        phoneCountryCode: z
+        phone_country_code: z
             .string({ required_error: "Phone country code is required" })
             .min(1, "Phone country code is required")
             .max(3, "The country code must not exceed 3 digits.")
             .regex(/^\d+$/, "Country code must contain only numbers"),
 
-        phoneNumber: z
+        phone_number: z
             .string({ required_error: "Phone number is required" })
             .min(5, "Phone number is too short")
             .max(11, "Phone number is too long")
@@ -35,25 +43,25 @@ export const registerSchema = z
             .nonempty("City is required")
             .max(40, "The city name is too long"),
 
-        firstName: z
+        first_name: z
             .string({ required_error: "First name is required" })
             .nonempty("First name is required"),
 
-        lastName: z
+        last_name: z
             .string({ required_error: "Last name is required" })
             .nonempty("Last name is required"),
 
-        dateBirth: z
+        date_birth: z
             .string({ required_error: "Date of birth is required" })
             .nonempty("Date of birth is required")
             .refine((val) => !isNaN(Date.parse(val)), {
                 message: "Invalid date format",
             }),
 
-        isLandlord: z.boolean(),
+        is_landlord: z.boolean(),
     })
-    .refine((data) => data.password === data.confirmPassword, {
-        path: ["confirmPassword"],
+    .refine((data) => data.password === data.repeat_password, {
+        path: ["repeat_password"],
         message: "The passwords do not match",
     });
 

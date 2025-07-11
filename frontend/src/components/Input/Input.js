@@ -11,7 +11,11 @@ const Input = ({helpText, type, maxLength, onchange, error, value}) => {
                 onChange={onchange}
                 value={value}
             />
-            {error && <p style={{ color: 'red', fontSize: '0.8rem' }}>{error.join('. ')}</p>}
+            {error && (
+                <p style={{ color: 'red', fontSize: '0.8rem' }}>
+                    {Array.isArray(error) ? error.join('. ') : error}
+                </p>
+            )}
         </>
     );
 }

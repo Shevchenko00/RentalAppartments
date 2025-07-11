@@ -63,7 +63,7 @@ const Login = () => {
                                 <h1>Welcome Back!</h1>
                                 <Input onchange={(e) => setEmail(e.target.value)} error={errors.email} value={email}
                                        helpText={'Email'} type={'text'}/>
-                                <Input onchange={(e) => setPassword(e.target.value)} error={errors.password}
+                                <Input onchange={(e) => setPassword(e.target.value)}
                                        value={password} helpText={'Password'} type={'password'}/>
                                 <Button disabled={isDisabled} type={'submit'} text={'submit'}/>
                                 <Link href="/register" className={styles.link_to_login}>

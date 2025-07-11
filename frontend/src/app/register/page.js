@@ -5,14 +5,15 @@ import Button from "@/components/Button/Button";
 import Link from 'next/link';
 import MotionForPage from "@/uttils/MotionForPage/MotionForPage";
 import {useState} from "react";
-import registerSchema from "@/schemas/auth.schema";
+import registerSchema, {loginSchema} from "@/schemas/auth.schema";
 import Checkbox from "@/components/Checkbox/Checkbox";
-
+import {loginUser, registerUser} from "@/api/auth";
+import convertCamelToSnake from "@/uttils/toSnakeCase/toSnakeCase"
 const RegisterPage = () => {
     const [errors, setErrors] = useState({});
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+    const [repeatPassword, setRepeatPassword] = useState('');
     const [phoneCountryCode, setPhoneCountryCode] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [country, setCountry] = useState('');
@@ -21,40 +22,55 @@ const RegisterPage = () => {
     const [lastName, setLastName] = useState('');
     const [dateBirth, setDateBirth] = useState('');
     const [isLandlord, setIsLandlord] = useState(false);
+    const [JSONError, setJSONError] = useState({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleSubmit = (e) => {
+    const formData = {
+        email,
+        password,
+        repeatPassword,
+        phoneCountryCode,
+        phoneNumber,
+        country,
+        city,
+        firstName,
+        lastName,
+        dateBirth,
+        isLandlord,
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const formData = {
-            email,
-            password,
-            confirmPassword,
-            phoneCountryCode,
-            phoneNumber,
-            country,
-            city,
-            firstName,
-            lastName,
-            dateBirth,
-            isLandlord,
-        };
+
 
         const parsedFormData = {
             ...formData,
-            dateBirth: new Date(formData.dateBirth),
         };
-
-        const result = registerSchema.safeParse(parsedFormData);
-
-        if (!result.success) {
-            const fieldErrors = result.error.flatten().fieldErrors;
-            setErrors(fieldErrors);
+        try {
+            const result = registerSchema.safeParse(convertCamelToSnake(parsedFormData));
+            if (!result.success) {
+                const fieldErrors = result.error.flatten().fieldErrors;
+                setErrors(fieldErrors);
+                return;
+            }
+            const data = await registerUser({...convertCamelToSnake(parsedFormData)});
+                setErrors({});
+                const validData = result.data;
+                console.log("Validated form data:", validData);
+        } catch (err) {
+            console.log(convertCamelToSnake(parsedFormData))
+            if (typeof err === 'object' && err.detail) {
+                setJSONError(err);
+            } else {
+                setJSONError({ detail: 'Unknown error while logging in.' });
+            }
+        } finally {
+            setIsSubmitting(false);
         }
-
-        setErrors({});
-        const validData = result.data;
-        console.log("Validated form data:", validData);
     };
+    const isEmailValid = registerSchema.safeParse(formData).success;
+    const isDisabled = !email || !password || isEmailValid || isSubmitting;
 
     return(
         <>
@@ -80,9 +96,9 @@ const RegisterPage = () => {
                             <Input
                                 helpText={'Repeat Password'}
                                 type={'password'}
-                                value={confirmPassword}
-                                onchange={(e) => setConfirmPassword(e.target.value)}
-                                error={errors.confirmPassword}
+                                value={repeatPassword}
+                                onchange={(e) => setRepeatPassword(e.target.value)}
+                                error={errors.repeat_password}
                             />
                             <Input
                                 helpText={'City'}
@@ -104,45 +120,48 @@ const RegisterPage = () => {
                                 maxLength={3}
                                 value={phoneCountryCode}
                                 onchange={(e) => setPhoneCountryCode(e.target.value)}
-                                error={errors.phoneCountryCode}
+                                error={errors.phone_country_code}
                             />
                             <Input
                                 helpText={'Phone number'}
                                 type={'tel'}
                                 value={phoneNumber}
                                 onchange={(e) => setPhoneNumber(e.target.value)}
-                                error={errors.phoneNumber}
+                                error={errors.phone_number}
                             />
                             <Input
                                 helpText={'First Name'}
                                 type={'text'}
                                 value={firstName}
                                 onchange={(e) => setFirstName(e.target.value)}
-                                error={errors.firstName}
+                                error={errors.first_name}
                             />
                             <Input
                                 helpText={'Last Name'}
                                 type={'text'}
                                 value={lastName}
                                 onchange={(e) => setLastName(e.target.value)}
-                                error={errors.lastName}
+                                error={errors.last_name}
                             />
                             <Input
                                 helpText={'Date birthday'}
                                 type={'date'}
                                 value={dateBirth}
                                 onchange={(e) => setDateBirth(e.target.value)}
-                                error={errors.dateBirth}
+                                error={errors.date_birth}
                             />
                             <Checkbox
                                 label="Are you a landlord?"
-                                onchange={setIsLandlord}
-                                error={errors.isLandlord}
+                                onchange={() => setIsLandlord(!isLandlord)}
+                                checked={isLandlord}
                             />
-                            <Button type={'submit'} text={'submit'}/>
+                            <Button disabled={isDisabled} type={'submit'} text={'submit'}/>
                             <Link href="/login" className={styles.link_to_login}>
                                 Have an account?
                             </Link>
+                            {typeof JSONError?.detail === 'string' && JSONError.detail.trim() !== '' && (
+                                <p className={styles.error_message}>{JSONError.detail}</p>
+                            )}
                         </form>
                     </div>
                 </div>
