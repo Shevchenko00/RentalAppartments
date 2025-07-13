@@ -1,0 +1,50 @@
+.carousel_wrapper {
+  padding: 60px 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.swiper-slide {
+  display: flex;
+  justify-content: center; // Центрует карточку внутри слайда
+  height: auto;            // Не растягивать по высоте
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  width: 100%;
+  max-width: 320px; // чтобы они были примерно равны
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+.person_info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.person_image {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.person_name {
+  font-size: 20px;
+  font-weight: 600;
+  font-family: 'Roboto', sans-serif;
+}
+
+.description {
+  font-size: 16px;
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.5;
+  color: #333;
+}
