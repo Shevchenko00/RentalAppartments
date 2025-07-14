@@ -14,11 +14,6 @@ const Footer = () => {
                 <p>Email: info@hotel.com</p>
             </div>
 
-            <div className={styles.center}>
-                <a href="/signin">Sign in</a>
-                <a href="/register">Register</a>
-            </div>
-
             <div className={styles.right}>
                 <p><strong>Working time</strong></p>
                 <p>City, address, 01234</p>

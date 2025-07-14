@@ -27,7 +27,7 @@
     margin: 4px 0;
   }
 
-  .left, .center, .right {
+  .left, .right {
     flex: 1;
     min-width: 200px;
     margin-bottom: 20px;
@@ -50,7 +50,7 @@
     align-items: center;
     text-align: center;
 
-    .left, .center, .right {
+    .left, .right {
       flex: unset;
       min-width: unset;
       width: 100%;
