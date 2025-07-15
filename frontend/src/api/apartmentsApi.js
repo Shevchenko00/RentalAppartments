@@ -1,9 +1,11 @@
 const productApi = process.env.NEXT_PUBLIC_PRODUCTS_
 
 
-const getHotels = async (token) => {
-    const response = await fetch(`${productApi}/tasks/`, {
+
+const getApartment = async (token) => {
+    const response = await fetch(`${productApi}/apartment/`, {
         method: 'GET',
+        credentials: 'include',
         headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
@@ -16,3 +18,5 @@ const getHotels = async (token) => {
 
     return await response.json();
 }
+
+export default getApartment;

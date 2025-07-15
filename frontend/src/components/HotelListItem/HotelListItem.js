@@ -1,16 +1,17 @@
 import styles from './HotelListItem.module.scss'
 
 
-const HotelListItem = () => {
+const ApartmentListItem = ({title, description, price}) => {
     return (
         <div className={styles.hli_container}>
             <div className={styles.img_block}>
-                <img src="/your-image.jpg" alt="Hotel" />
+                <img src="" alt="Hotel" />
             </div>
             <div className={styles.text_wrapper}>
-                <h1>Hotel</h1>
+                <h1>{title}</h1>
                 <div className={styles.txt_block}>
-                    <p>Description</p>
+                    <p className={styles.price}>${price}</p>
+                    <p>{description}</p>
                 </div>
             </div>
         </div>
@@ -18,4 +19,4 @@ const HotelListItem = () => {
 };
 
 
-export default HotelListItem;
+export default ApartmentListItem;

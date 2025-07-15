@@ -4,11 +4,12 @@ import * as styles from './page.module.scss'
 import Button from "@/components/Button/Button";
 import Link from 'next/link';
 import MotionForPage from "@/uttils/MotionForPage/MotionForPage";
-import {useState} from "react";
-import registerSchema, {loginSchema} from "@/schemas/auth.schema";
+import {useEffect, useState} from "react";
+import registerSchema from "@/schemas/auth.schema";
 import Checkbox from "@/components/Checkbox/Checkbox";
-import {loginUser, registerUser} from "@/api/auth";
 import convertCamelToSnake from "@/uttils/toSnakeCase/toSnakeCase"
+import {useRouter} from "next/navigation";
+import getCookie from "@/uttils/getCookie/getCookie";
 const RegisterPage = () => {
     const [errors, setErrors] = useState({});
     const [email, setEmail] = useState('');
@@ -24,6 +25,13 @@ const RegisterPage = () => {
     const [isLandlord, setIsLandlord] = useState(false);
     const [JSONError, setJSONError] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const router = useRouter()
+
+    useEffect(() => {
+        if (getCookie('access_token')) {
+            router.push('/apartments')
+        }
+    }, []);
 
     const formData = {
         email,
@@ -54,10 +62,7 @@ const RegisterPage = () => {
                 setErrors(fieldErrors);
                 return;
             }
-            const data = await registerUser({...convertCamelToSnake(parsedFormData)});
                 setErrors({});
-                const validData = result.data;
-                console.log("Validated form data:", validData);
         } catch (err) {
             console.log(convertCamelToSnake(parsedFormData))
             if (typeof err === 'object' && err.detail) {
