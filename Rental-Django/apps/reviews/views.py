@@ -15,11 +15,11 @@ class ReviewList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]  # Только для аутентифицированных пользователей
 
     def perform_create(self, serializer):
-        # Получаем информацию об объекте объявления (announcement)
-        announcement = serializer.validated_data.get('announcement')
+        # Получаем информацию об объекте объявления (Apartment)
+        Apartment = serializer.validated_data.get('Apartment')
 
         # Проверяем, бронировал ли текущий пользователь этот объект
-        if not Reservation.objects.filter(user=self.request.user, announcement=announcement).exists():
+        if not Reservation.objects.filter(user=self.request.user, Apartment=Apartment).exists():
             raise PermissionDenied("Вы можете оставить отзыв только на те апартаменты, которые бронировали.")
 
         # Если проверка пройдена, сохраняем отзыв с текущим пользователем как арендатором (renter)

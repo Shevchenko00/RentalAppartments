@@ -1,7 +1,7 @@
 from rest_framework import generics
 from rest_framework.exceptions import NotFound
 
-from apps.housing.models import Announcement
+from apps.apartment.models import Apartment
 from apps.reservations.models.reservations import Reservation
 from apps.reservations.serializers.approved_serializer import ApproveSerializer
 from apps.reservations.serializers.cancel_serializers import CancelSerializer
@@ -15,14 +15,14 @@ class ReservationCreateView(generics.CreateAPIView):
     serializer_class = ReservationSerializer
 
     def perform_create(self, serializer):
-        announcement_id = self.kwargs.get('pk')
+        Apartment_id = self.kwargs.get('pk')
         try:
-            announcement = Announcement.objects.get(pk=announcement_id)
-        except Announcement.DoesNotExist:
-            raise NotFound('Announcement not found.')
+            Apartment = Apartment.objects.get(pk=Apartment_id)
+        except Apartment.DoesNotExist:
+            raise NotFound('Apartment not found.')
 
 
-        serializer.save(user=self.request.user, announcement=announcement, is_approved=False)
+        serializer.save(user=self.request.user, Apartment=Apartment, is_approved=False)
 
 
 class CheckReservationView(generics.ListAPIView):

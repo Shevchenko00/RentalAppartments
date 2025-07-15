@@ -1,10 +1,10 @@
 from rest_framework.serializers import ModelSerializer
 
-from apps.housing.models import Announcement
+from apps.apartment.models import Apartment
 
 
 class ChangeActiveSerializer(ModelSerializer):
     class Meta:
-        model = Announcement
+        model = Apartment
         fields = ['is_active']
         read_only_fields = ['landlord']

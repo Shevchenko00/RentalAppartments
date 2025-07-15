@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # local app(s)
-    'apps.housing.apps.HousingConfig',
+    'apps.apartment.apps.ApartmentConfig',
     'apps.users.apps.UsersConfig',
     'apps.reviews.apps.ReviewsConfig',
     'apps.reservations.apps.ReservationsConfig',
@@ -93,8 +93,8 @@ MIDDLEWARE = [
     # 'django_auto_logout.middleware.auto_logout',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     # 'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'apps.users.middlewares.auto_jwt_token.JWTAuthenticationMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]

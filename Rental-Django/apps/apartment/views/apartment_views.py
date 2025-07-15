@@ -3,46 +3,46 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, filters
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from apps.housing.models import Announcement
-from apps.housing.serializers.change_active import ChangeActiveSerializer
-from apps.housing.serializers.hotel import AnnouncementSerializer
-from apps.housing.views.search_views import AnnouncementFilter
+from apps.apartment.models import Apartment
+from apps.apartment.serializers.change_active import ChangeActiveSerializer
+from apps.apartment.serializers.apartment_serializer import ApartmentSerializer
+from apps.apartment.views.search_views import ApartmentFilter
 from apps.users.permissions.landlord_permissions import IsLandlordOwner
 
 
-class HousingCreateAPI(generics.CreateAPIView):
+class ApartmentCreateAPI(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
-    queryset = Announcement.objects.all()
-    serializer_class = AnnouncementSerializer
+    queryset = Apartment.objects.all()
+    serializer_class = ApartmentSerializer
 
 
-class HousingDetailAPI(generics.RetrieveAPIView):
+class ApartmentDetailAPI(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
-    queryset = Announcement.objects.all()
-    serializer_class = AnnouncementSerializer
+    queryset = Apartment.objects.all()
+    serializer_class = ApartmentSerializer
     lookup_field = 'pk'
 
 
-class HousingUpdateDeleteAPI(generics.RetrieveUpdateDestroyAPIView):
+class ApartmentUpdateDeleteAPI(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsLandlordOwner]
-    queryset = Announcement.objects.all()
-    serializer_class = AnnouncementSerializer
+    queryset = Apartment.objects.all()
+    serializer_class = ApartmentSerializer
 
 
 
-class HouseChangeActiveAPI(generics.UpdateAPIView):
+class ApartmentChangeActiveAPI(generics.UpdateAPIView):
     permission_classes = [IsLandlordOwner]
-    queryset = Announcement.objects.all()
+    queryset = Apartment.objects.all()
     serializer_class = ChangeActiveSerializer
     lookup_field = 'pk'
 
 
-class HousingSearch(generics.ListAPIView):
+class ApartmentSearch(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
-    queryset = Announcement.objects.filter()
-    serializer_class = AnnouncementSerializer
+    queryset = Apartment.objects.filter()
+    serializer_class = ApartmentSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_class = AnnouncementFilter
+    filterset_class = ApartmentFilter
 
     def get_queryset(self):
         queryset = super().get_queryset()

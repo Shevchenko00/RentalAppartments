@@ -22,6 +22,6 @@ class User(Base):
     is_landlord = Column(Boolean, default=False)
     is_active = Column(Boolean, default=True)
     is_staff= Column(Boolean, default=False)
-    date_joined = Column(DateTime, server_default=func.now())
-    # username = Column(String, default=email)
+    date_joined = Column(DateTime, default=func.now(), nullable=False)
+
 

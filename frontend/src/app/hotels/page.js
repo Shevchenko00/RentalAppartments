@@ -1,16 +1,20 @@
 import styles from './page.module.scss'
-import Header from "@/components/Header/Header";
-import Input from "@/components/Input/Input";
-import Button from "@/components/Button/Button";
+import HotelListItem from "@/components/HotelListItem/HotelListItem";
 
 const Hotels = () => {
-
     return (
         <>
             <div className={styles.container}>
-
                 <div className={styles.layout}>
-                    <main className={styles.main}>Контент</main>
+                    <main className={styles.main}>
+                        <HotelListItem/>
+                        <HotelListItem/>
+                        <HotelListItem/>
+                        <HotelListItem/>
+                        <HotelListItem/>
+                        <HotelListItem/>
+                        <HotelListItem/>
+                    </main>
                     <aside className={styles.sidebar}>
                         <div className={styles.filter}>
                             <h1>Price</h1>

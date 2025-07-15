@@ -7,6 +7,6 @@ from apps.reviews.models.reviews import Review
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = ['renter', 'announcement', 'review', 'rating']
+        fields = ['renter', 'Apartment', 'review', 'rating']
         read_only_fields = ['renter']
 
