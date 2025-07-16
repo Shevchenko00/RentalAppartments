@@ -20,6 +20,9 @@ class Apartment(models.Model):
     is_active = models.BooleanField(max_length=10, default=False,
                                  help_text='(поле является обязательным)', verbose_name='Статус объявления')
 
+    photo = models.ImageField(upload_to='apartment_photos/', null=False, blank=True,
+                              verbose_name='Фото', help_text='Загрузите фото квартиры')
+
     landlord = models.ForeignKey(User, null=False, blank=False, on_delete=models.CASCADE)
     def save(self, *args, **kwargs):
         if not self.landlord_id:

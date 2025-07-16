@@ -7,6 +7,8 @@ const Layout = ({children}) => {
         {title: 'My listing', href: '/booking'},
     ];
 
+
+
     return (
         <>
         <Header links={links}/>

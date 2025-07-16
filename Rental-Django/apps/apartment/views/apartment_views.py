@@ -47,9 +47,9 @@ class ApartmentSearch(generics.ListAPIView):
     def get_queryset(self):
         queryset = super().get_queryset()
 
-        # Фильтрация по активности
+
         is_active = self.request.query_params.get('is_active', None)
         if is_active:
-            queryset = queryset.filter(is_active=is_active)  # Примените фильтрацию по активности
+            queryset = queryset.filter(is_active=is_active)
 
         return queryset

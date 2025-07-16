@@ -4,7 +4,7 @@ import styles from './page.module.scss'
 import {useRouter} from "next/navigation";
 import getCookie from "@/uttils/getCookie/getCookie";
 import {useEffect, useState} from "react";
-import getApartment from "@/api/apartmentsApi";
+import {getApartment} from "@/api/apartmentsApi";
 import ApartmentListItem from "@/components/HotelListItem/HotelListItem";
 
 const Apartments = () => {
@@ -13,25 +13,23 @@ const Apartments = () => {
 
     useEffect(() => {
         const token = getCookie('access_token');
-        if (!token) {
-            router.push('/login');
-            return;
-        }
 
         const fetchApartments = async () => {
             try {
                 const data = await getApartment(token);
-                console.log('Apartments data:', data);
-                return data;
+                setApartments(data);
             } catch (error) {
-                console.error('Failed to fetch apartments:', error);
+                if (error.status === 401) {
+                    document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    router.push('/login');
+                } else {
+                    console.error('Failed to fetch apartments:', error);
+                }
             }
         };
 
-        fetchApartments().then(data => {
-            if (data) setApartments(data);
-        });
-    }, []);
+        fetchApartments();
+    }, [router]);
 
 
     return (
@@ -43,6 +41,7 @@ const Apartments = () => {
                             <ApartmentListItem
                                 key={apartment.id}
                                 id={apartment.id}
+                                img={apartment.photo}
                                 title={apartment.title}
                                 price={apartment.price}
                                 description={apartment.description}

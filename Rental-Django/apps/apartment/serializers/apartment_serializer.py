@@ -10,8 +10,8 @@ class ApartmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Apartment
-        fields = ['title', 'description', 'city', 'street', 'price', 'is_active', 'apartment_type',
-                  'count_room', 'landlord', 'reviews']
+        fields = ['id', 'title', 'description', 'city', 'street', 'price', 'is_active', 'apartment_type',
+                  'count_room', 'landlord', 'reviews', 'photo']
         read_only_fields = ['landlord']
 
     # def get_average_rating(self, obj):
