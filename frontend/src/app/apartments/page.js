@@ -5,7 +5,7 @@ import {useRouter} from "next/navigation";
 import getCookie from "@/uttils/getCookie/getCookie";
 import {useEffect, useState} from "react";
 import {getApartment} from "@/api/apartmentsApi";
-import ApartmentListItem from "@/components/HotelListItem/HotelListItem";
+import ApartmentListItem from "@/components/HotelListItem/ApartmentListItem";
 
 const Apartments = () => {
     const router = useRouter()

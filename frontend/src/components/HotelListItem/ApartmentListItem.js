@@ -1,4 +1,4 @@
-import styles from './HotelListItem.module.scss'
+import styles from './ApartmentListItem.module.scss'
 import Link from "next/link";
 
 
