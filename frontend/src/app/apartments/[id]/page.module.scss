@@ -6,7 +6,6 @@
   background-color: #FFE8E8;
   box-sizing: border-box;
 
-
   h1 {
     font-size: 2.5rem;
     font-family: Roboto, 'sans-serif';
@@ -17,20 +16,19 @@
   }
 
   img {
-    width: 100%;
+    display: block;
+    width: 80%;
+    max-width: 600px;
     max-height: 400px;
-    font-family: Roboto, 'sans-serif';
-
     object-fit: cover;
     border-radius: 10px;
-    margin-bottom: 25px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    margin: 20px auto;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
   }
 
   p {
     font-size: 1.1rem;
     font-family: Roboto, 'sans-serif';
-
     line-height: 1.6;
     margin-bottom: 12px;
 
@@ -39,12 +37,16 @@
     }
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
     padding: 15px;
-    margin: 20px 15px;
 
     h1 {
       font-size: 2rem;
+    }
+
+    img {
+      width: 100%;
+      max-width: 100%;
     }
 
     p {

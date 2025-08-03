@@ -3,7 +3,7 @@ import Footer from "@/components/Footer/Footer";
 
 const Layout = ({children}) => {
     const links = [
-        {title: 'Logout', href: '/login'},
+        {title: 'Logout', href: '/logout'},
         {title: 'My listing', href: '/booking'},
     ];
 
