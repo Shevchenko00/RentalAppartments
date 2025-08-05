@@ -1,36 +1,67 @@
 .container {
   max-width: 1063px;
   width: 100%;
-  margin: 10px auto;
-  padding: 0 20px;
+  margin: 20px auto;
+  padding: 20px;
   background-color: #FFE8E8;
   box-sizing: border-box;
+  border-radius: 12px;
+}
+
+.layout {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+.imageBlock {
+  flex: 1;
+  max-width: 55%;
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 500px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin: 0 auto;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+
+    img {
+      max-height: 300px;
+    }
+  }
+}
+
+.infoBlock {
+  flex: 1;
+  max-width: 45%;
 
   h1 {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-family: Roboto, 'sans-serif';
     margin-bottom: 20px;
     color: #222;
     font-weight: 700;
-    text-align: center;
-  }
-
-  img {
-    display: block;
-    width: 80%;
-    max-width: 600px;
-    max-height: 400px;
-    object-fit: cover;
-    border-radius: 10px;
-    margin: 20px auto;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
   }
 
   p {
     font-size: 1.1rem;
     font-family: Roboto, 'sans-serif';
     line-height: 1.6;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
 
     strong {
       color: #0070f3;
@@ -38,15 +69,11 @@
   }
 
   @media (max-width: 768px) {
-    padding: 15px;
+    max-width: 100%;
 
     h1 {
-      font-size: 2rem;
-    }
-
-    img {
-      width: 100%;
-      max-width: 100%;
+      font-size: 1.6rem;
+      text-align: center;
     }
 
     p {
@@ -54,3 +81,57 @@
     }
   }
 }
+
+
+.landlordBlock {
+  background-color: #fff0f0;
+  padding: 16px 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(255, 100, 100, 0.15);
+  margin-top: 24px;
+  font-family: Roboto, 'sans-serif';
+
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .iconWrapper {
+    flex-shrink: 0;
+
+    img {
+      border-radius: 50%;
+      object-fit: cover;
+      width: 94px;
+      height: 94px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .infoWrapper {
+    flex: 1;
+
+    p {
+      margin: 8px 0;
+      font-size: 1rem;
+      color: rgb(0, 111, 241);
+
+      strong {
+        color: #141212;
+        font-weight: 700;
+        margin-right: 6px;
+
+      }
+    }
+    a {
+      color: rgb(0, 111, 241);
+      text-decoration: none;
+    }
+  }
+}
+
+

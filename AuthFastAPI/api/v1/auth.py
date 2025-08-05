@@ -7,7 +7,8 @@ from db.sessions import Session
 from db.models import User
 from db.sessions import get_db
 from services.auth import verify_password, create_access_token, create_refresh_token, hash_password
-
+from fastapi import Path
+from schemas.user import UserPublicSchema
 from schemas.user import UserRegisterSchema, LoginSchema
 
 from services.auth import SECRET_KEY, ALGORITHM
@@ -87,4 +88,12 @@ def refresh_token(refresh_token: str):
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid refresh token")
 
-
+@router.get("/users/{user_id}", response_model=UserPublicSchema)
+def get_user_info(
+    user_id: int = Path(..., description="ID пользователя"),
+    db: Session = Depends(get_db)
+):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user

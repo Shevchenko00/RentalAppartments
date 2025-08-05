@@ -10,7 +10,9 @@ const Header = ({ links }) => {
 
     return (
         <header className={styles.head}>
-            <img src={'/images/ApartmentLogo.png'} className={styles.logo}/>
+            <Link href="/">
+                <img src="/images/ApartmentLogo.png" alt="Logo" className={styles.logo} />
+            </Link>
 
             <button className={styles.burger} onClick={toggleMenu} aria-label="Toggle navigation">
                 <span className={isOpen ? styles.open : ''}></span>

@@ -3,7 +3,7 @@ from typing import Annotated
 from pydantic import BaseModel, EmailStr, validator, constr, Field
 import re
 from datetime import date
-
+from typing import Optional
 from pydantic import BaseModel, EmailStr
 
 class LoginSchema(BaseModel):
@@ -52,3 +52,18 @@ class UserRegisterSchema(BaseModel):
         if "password" in values and v != values["password"]:
             raise ValueError("Passwords must match")
         return v
+
+class UserPublicSchema(BaseModel):
+    id: int
+    email: str
+    first_name: Optional[str]
+    last_name: Optional[str]
+    phone_number: Optional[str]
+
+
+    class Config:
+        orm_mode = True
+
+    @validator("phone_number", pre=True)
+    def convert_phone_to_str(cls, v):
+        return str(v) if v is not None else v

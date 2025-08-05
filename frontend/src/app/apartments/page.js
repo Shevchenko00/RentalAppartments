@@ -29,6 +29,8 @@ const Apartments = () => {
         };
 
         fetchApartments();
+        console.log(apartments);
+
     }, [router]);
 
 

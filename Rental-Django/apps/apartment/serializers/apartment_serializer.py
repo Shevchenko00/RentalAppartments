@@ -1,26 +1,32 @@
-from django.db.models import Avg
+import os
+
 from rest_framework import serializers
+import requests
 from apps.apartment.models.apartment import Apartment
-from apps.reviews.serializers.review_serializer import ReviewSerializer
-
-
 class ApartmentSerializer(serializers.ModelSerializer):
-    reviews = ReviewSerializer(many=True, read_only=True)
-    # average_rating = serializers.SerializerMethodField()
+    landlord = serializers.SerializerMethodField()
 
     class Meta:
         model = Apartment
-        fields = ['id', 'title', 'description', 'city', 'street', 'price', 'is_active', 'apartment_type',
-                  'count_room', 'landlord', 'reviews', 'photo']
+        fields = [
+            'id', 'title', 'description', 'city', 'street', 'price', 'is_active',
+            'apartment_type', 'count_room', 'landlord', 'photo'
+        ]
         read_only_fields = ['landlord']
 
-    # def get_average_rating(self, obj):
-    #     average = obj.reviews.aggregate(Avg('rating'))['rating__avg']
-    #     return round(average, 1) if average is not None else None
+    def get_landlord(self, obj):
+        try:
+            user_id = obj.landlord_id
+            url = f"{os.getenv('AUTH_SERVICE')}/users/{user_id}"
+            headers = {}
 
-    def create(self, validated_data):
-        user = self.context['request'].user
+            request = self.context.get('request')
+            if request and request.headers.get('Authorization'):
+                headers['Authorization'] = request.headers['Authorization']
 
-        validated_data['landlord'] = user
-
-        return super().create(validated_data)
+            response = requests.get(url, headers=headers, timeout=5)
+            if response.status_code == 200:
+                return response.json()
+            return {"id": user_id, "error": "User not found"}
+        except Exception as e:
+            return {"error": str(e)}

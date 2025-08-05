@@ -1,0 +1,45 @@
+.container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 24px;
+  background-color: #fff0f0;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(255, 100, 100, 0.15);
+  font-family: Roboto, 'sans-serif';
+  color: #100f0f;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #100f0f;
+  text-align: center;
+}
+
+.infoItem {
+  font-size: 1.1rem;
+  margin-bottom: 16px;
+  line-height: 1.5;
+
+  strong {
+    color: #2c84b8;
+    font-weight: 700;
+    margin-right: 8px;
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 16px;
+    margin: 20px 16px;
+  }
+
+  .title {
+    font-size: 1.6rem;
+  }
+
+  .infoItem {
+    font-size: 1rem;
+  }
+}
