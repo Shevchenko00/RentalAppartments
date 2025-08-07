@@ -9,9 +9,10 @@ from db.sessions import get_db
 from services.auth import verify_password, create_access_token, create_refresh_token, hash_password
 from fastapi import Path
 from schemas.user import UserPublicSchema
-from schemas.user import UserRegisterSchema, LoginSchema
+from schemas.user import UserRegisterSchema, LoginSchema, RefreshRequest
 
 from services.auth import SECRET_KEY, ALGORITHM
+
 
 router = APIRouter()
 
@@ -61,7 +62,7 @@ def register(user_data: UserRegisterSchema, db: Session = Depends(get_db)):
 
     access_token = create_access_token(
         data={"sub": str(user.id)},
-        expires_delta=timedelta(minutes=15)
+        expires_delta=timedelta(minutes=1)
     )
     refresh_token = create_refresh_token(
         data={"sub": str(user.id)},
@@ -77,16 +78,24 @@ def register(user_data: UserRegisterSchema, db: Session = Depends(get_db)):
 
 
 @router.post("/refresh")
-def refresh_token(refresh_token: str):
+def refresh_token(data: RefreshRequest):
     try:
-        payload = jwt.decode(refresh_token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(data.refresh_token, SECRET_KEY, algorithms=[ALGORITHM])
+
+        if payload.get("token_type") != "refresh":
+            raise HTTPException(status_code=401, detail="Invalid token type")
+
         user_id = payload.get("sub")
         if user_id is None:
             raise HTTPException(status_code=401, detail="Invalid refresh token")
+
         new_token = create_access_token({"sub": user_id})
         return {"access_token": new_token, "token_type": "bearer"}
-    except JWTError:
+
+    except JWTError as e:
+        print("JWT decode error:", e)
         raise HTTPException(status_code=401, detail="Invalid refresh token")
+
 
 @router.get("/users/{user_id}", response_model=UserPublicSchema)
 def get_user_info(

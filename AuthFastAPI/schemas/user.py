@@ -67,3 +67,10 @@ class UserPublicSchema(BaseModel):
     @validator("phone_number", pre=True)
     def convert_phone_to_str(cls, v):
         return str(v) if v is not None else v
+
+
+
+
+
+class RefreshRequest(BaseModel):
+    refresh_token: str

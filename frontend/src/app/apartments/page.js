@@ -6,22 +6,30 @@ import getCookie from "@/uttils/getCookie/getCookie";
 import {useEffect, useState} from "react";
 import {getApartment} from "@/api/apartmentsApi";
 import ApartmentListItem from "@/components/HotelListItem/ApartmentListItem";
+import AnimatedSection from "@/components/AnimateSection/AnimateSection";
+import {fetchNewToken} from "@/api/auth";
 
 const Apartments = () => {
     const router = useRouter()
     const [apartments, setApartments] = useState([])
 
     useEffect(() => {
-        const token = getCookie('access_token');
-
+        const accessToken = getCookie('access_token');
+        const refreshToken = getCookie('refresh_token')
         const fetchApartments = async () => {
             try {
-                const data = await getApartment(token);
+                const data = await getApartment(accessToken);
                 setApartments(data);
             } catch (error) {
                 if (error.status === 401) {
-                    document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-                    router.push('/login');
+                    try{
+                        await fetchNewToken(refreshToken)
+                    } catch (error) {
+                        if (error.status === 422 || error.status === 401) {
+                            router.push('/login');
+                            document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                        }
+                    }
                 } else {
                     console.error('Failed to fetch apartments:', error);
                 }
@@ -37,6 +45,7 @@ const Apartments = () => {
     return (
         <>
             <div className={styles.container}>
+                <AnimatedSection>
                 <div className={styles.layout}>
                     <main className={styles.main}>
                         {apartments.map(apartment => (
@@ -79,6 +88,7 @@ const Apartments = () => {
                         <button className={styles.btn} type={'submit'}>Apply</button>
                     </aside>
                 </div>
+                </AnimatedSection>
             </div>
         </>
     )

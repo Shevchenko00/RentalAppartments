@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { getApartmentById } from '@/api/apartmentsApi';
 import getCookie from '@/uttils/getCookie/getCookie';
 import styles from './page.module.scss';
+import {fetchNewToken} from "@/api/auth";
 
 const ApartmentDetailPage = () => {
     const params = useParams();
@@ -16,6 +17,8 @@ const ApartmentDetailPage = () => {
         const fetchApartment = async () => {
             const token = getCookie('access_token');
             const id = params?.id;
+            const refreshToken = getCookie('refresh_token')
+
 
             if (!id) {
                 console.warn('ID is missing in URL');
@@ -27,12 +30,15 @@ const ApartmentDetailPage = () => {
                 const data = await getApartmentById(id, token);
                 setApartment(data);
             } catch (error) {
-                const status = error?.status || error?.response?.status;
-
-                if (status === 401) {
-                    router.push('/logout');
-                } else {
-                    console.error('Failed to fetch apartment:', error);
+                if (error.status === 401) {
+                    try{
+                        await fetchNewToken(refreshToken)
+                    } catch (error) {
+                        if (error.status === 422 || error.status === 401) {
+                            router.push('/login');
+                            document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                        }
+                    }
                 }
             } finally {
                 setLoading(false);
