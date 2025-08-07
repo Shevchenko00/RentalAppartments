@@ -8,10 +8,13 @@ import {getApartment} from "@/api/apartmentsApi";
 import ApartmentListItem from "@/components/HotelListItem/ApartmentListItem";
 import AnimatedSection from "@/components/AnimateSection/AnimateSection";
 import {fetchNewToken} from "@/api/auth";
+import {useLoading} from "@/hooks/useLoader";
+import Loader from "@/components/Loader/Loader";
 
 const Apartments = () => {
     const router = useRouter()
     const [apartments, setApartments] = useState([])
+    const { loading, setLoading } = useLoading();
 
     useEffect(() => {
         const accessToken = getCookie('access_token');
@@ -33,6 +36,8 @@ const Apartments = () => {
                 } else {
                     console.error('Failed to fetch apartments:', error);
                 }
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -41,6 +46,7 @@ const Apartments = () => {
 
     }, [router]);
 
+    if (loading) return <Loader/>;
 
     return (
         <>

@@ -44,7 +44,7 @@ def create_refresh_token(data: dict, expires_delta: timedelta = timedelta(days=7
     expire = datetime.utcnow() + expires_delta
     to_encode.update({
         "exp": expire,
-        "sub": str(data["sub"]),  # <-- исправлено здесь
+        "sub": str(data["sub"]),
         "token_type": "refresh",
         "jti": str(uuid.uuid4()),
     })

@@ -6,13 +6,14 @@ import getCookie from "@/uttils/getCookie/getCookie";
 import { getUserById, getUserByToken } from "@/api/userApi";
 import styles from './page.module.scss';
 import {fetchNewToken} from "@/api/auth";
+import {useLoading} from "@/hooks/useLoader";
+import Loader from "@/components/Loader/Loader";
 
 const Profile = () => {
     const router = useRouter();
     const [userId, setUserId] = useState(null);
     const [user, setUser] = useState(null);
-
-    useEffect(() => {
+    const { loading, setLoading } = useLoading();    useEffect(() => {
         const fetchUserId = async () => {
             const token = getCookie('access_token');
             const refreshToken = getCookie('refresh_token')
@@ -28,6 +29,8 @@ const Profile = () => {
                             router.push('/login');
                             document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
                         }
+                    } finally {
+                        setLoading(false);
                     }
                 }
             }
@@ -49,13 +52,15 @@ const Profile = () => {
                     document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
                     router.push('/login');
                 }
+            } finally {
+                setLoading(false);
             }
         };
 
         fetchUserById();
     }, [userId, router]);
 
-    if (!user) return <p>Loading...</p>;
+    if (loading) return <Loader/>;
 
     return (
         <div className={styles.container}>

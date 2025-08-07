@@ -6,12 +6,14 @@ import { getApartmentById } from '@/api/apartmentsApi';
 import getCookie from '@/uttils/getCookie/getCookie';
 import styles from './page.module.scss';
 import {fetchNewToken} from "@/api/auth";
+import Loader from "@/components/Loader/Loader";
+import {useLoading} from "@/hooks/useLoader";
 
 const ApartmentDetailPage = () => {
     const params = useParams();
     const router = useRouter();
     const [apartment, setApartment] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const { loading, setLoading } = useLoading();
 
     useEffect(() => {
         const fetchApartment = async () => {
@@ -48,7 +50,7 @@ const ApartmentDetailPage = () => {
         fetchApartment();
     }, [params, router]);
 
-    if (loading) return <p>Loading apartment...</p>;
+    if (loading) return <Loader/>;
     if (!apartment) return <p>Apartment not found.</p>;
 
     return (
