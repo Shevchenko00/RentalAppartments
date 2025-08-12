@@ -21,12 +21,6 @@ const ApartmentListItem = ({ id, title, description, price, img}) => {
                         <p>{description}</p>
                     </div>
                 </div>
-                {/*{landlord && (*/}
-                {/*    <div className="landlord-info">*/}
-                {/*        <p><strong>Landlord:</strong> {landlord.first_name} {landlord.last_name}</p>*/}
-                {/*        <p><strong>Phone:</strong> {landlord.phone_number}</p>*/}
-                {/*    </div>*/}
-                {/*)}*/}
             </div>
         </>
     );

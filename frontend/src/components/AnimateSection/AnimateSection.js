@@ -9,7 +9,7 @@ const AnimatedSection = ({
                              duration = 0.6,
                              delay = 0,
                          }) => {
-    const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 });
+    const [ref, inView] = useInView({ triggerOnce: true, threshold: 0 });
 
     const getInitialPosition = () => {
         switch (direction) {

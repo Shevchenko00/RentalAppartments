@@ -134,4 +134,77 @@
   }
 }
 
+.reviewsBlock {
+  background-color: #fff0f0;
+  padding: 24px 32px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(255, 100, 100, 0.1);
+  margin-top: 32px;
+  font-family: Roboto, 'sans-serif';
+  max-width: 1063px;
+  width: 100%;
+  box-sizing: border-box;
+
+  h2 {
+    font-size: 1.8rem;
+    color: #2982b6;
+    margin-bottom: 20px;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .reviewItem {
+    background-color: #ffe8e8;
+    padding: 16px 20px;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    box-shadow: 0 3px 8px rgba(255, 100, 100, 0.12);
+
+    h3 {
+      font-size: 1.3rem;
+      margin-bottom: 6px;
+      color: #141212;
+      font-weight: 600;
+    }
+
+    p {
+      font-size: 1rem;
+      line-height: 1.5;
+      color: #4a4a4a;
+      margin-bottom: 8px;
+    }
+
+    .reviewerName {
+      font-weight: 700;
+      color: #222;
+      font-size: 0.95rem;
+      text-align: right;
+      font-style: italic;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 16px 20px;
+
+    h2 {
+      font-size: 1.5rem;
+    }
+
+    .reviewItem {
+      padding: 14px 16px;
+
+      h3 {
+        font-size: 1.1rem;
+      }
+
+      p {
+        font-size: 0.95rem;
+      }
+
+      .reviewerName {
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
 

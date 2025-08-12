@@ -9,6 +9,7 @@ export default function LogoutPage() {
     useEffect(() => {
         const logout = async () => {
             document.cookie = "access_token=; path=/; max-age=0";
+            document.cookie = "refresh_token=; path=/; max-age=0";
             router.push('/login');
         };
 

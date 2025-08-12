@@ -14,7 +14,7 @@ const ApartmentDetailPage = () => {
     const router = useRouter();
     const [apartment, setApartment] = useState(null);
     const { loading, setLoading } = useLoading();
-
+    const [reviews, setReviews] = useState([])
     useEffect(() => {
         const fetchApartment = async () => {
             const token = getCookie('access_token');
@@ -98,6 +98,20 @@ const ApartmentDetailPage = () => {
                         <strong>Email:</strong> <a href={`mailto:${apartment.landlord.email}`}>{apartment.landlord.email}</a>
                     </p>
                 </div>
+            </div>
+            <div className={styles.reviewsBlock}>
+                <h2>Reviews</h2>
+                {reviews && reviews.length > 0 ? (
+                    reviews.map(review => (
+                        <div key={review.id} className={styles.reviewItem}>
+                            <h3>{review.title}</h3>
+                            <p>{review.text}</p>
+                            <div className={styles.reviewerName}>— {review.author}</div>
+                        </div>
+                    ))
+                ) : (
+                    <h3>This apartment does not have any reviews.</h3>
+                )}
             </div>
         </div>
 
