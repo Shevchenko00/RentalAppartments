@@ -44,3 +44,34 @@ export const getApartmentById = async (id, token) => {
 
     return res.json();
 };
+
+
+
+export const getFiltredResult = async (
+    minPrice,
+    maxPrice,
+    minRoom,
+    maxRoom,
+    city,
+    token
+) => {
+    const params = new URLSearchParams();
+    if (minPrice) params.append("min_price", minPrice);
+    if (maxPrice) params.append("max_price", maxPrice);
+    if (minRoom) params.append("min_room", minRoom);
+    if (maxRoom) params.append("max_room", maxRoom);
+    // if (city) params.append("city", city);
+
+    const res = await fetch(`${productApi}/apartment/?${params.toString()}`, {
+        cache: "no-store",
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    if (!res.ok) {
+        throw new Error(`Ошибка загрузки: ${res.status}`);
+    }
+
+    return await res.json();
+};

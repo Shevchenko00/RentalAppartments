@@ -53,6 +53,20 @@
   }
 }
 
+.sidebarButtons {
+  display: flex;
+  gap: 8px;
+
+  .btn {
+    flex: 1;
+  }
+}
+
+.sidebar-buttons button {
+  flex: 1;
+}
+
+
 .filter {
   width: 100%;
   background-color: white;
