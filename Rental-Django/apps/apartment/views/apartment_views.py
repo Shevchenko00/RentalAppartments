@@ -1,7 +1,6 @@
-from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, filters
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 
 from apps.apartment.models import Apartment
 from apps.apartment.serializers.change_active import ChangeActiveSerializer
@@ -53,3 +52,12 @@ class ApartmentSearch(generics.ListAPIView):
             queryset = queryset.filter(is_active=is_active)
 
         return queryset
+
+
+class LandlordApartments(generics.ListAPIView):
+    serializer_class = ApartmentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Apartment.objects.filter(landlord=user)

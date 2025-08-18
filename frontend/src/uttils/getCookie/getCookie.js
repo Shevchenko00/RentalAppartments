@@ -1,6 +1,7 @@
 'use client'
 
 const getCookie = (name) => {
+    if (typeof document === 'undefined') return null;
     const cookies = document.cookie.split('; ');
     for (const cookie of cookies) {
         const [key, value] = cookie.split('=');

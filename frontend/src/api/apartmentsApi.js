@@ -75,3 +75,25 @@ export const getFiltredResult = async (
 
     return await res.json();
 };
+
+
+export const getMyApartments = async (token) => {
+    const res = await fetch(`${productApi}/apartment/my_apartments/`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    if (res.status === 401) {
+        const error = new Error('Unauthorized');
+        error.status = 401;
+        throw error;
+    }
+
+    if (!res.ok) {
+        const error = new Error('Request failed');
+        error.status = res.status;
+        throw error;
+    }
+
+    return res.json();
+};
