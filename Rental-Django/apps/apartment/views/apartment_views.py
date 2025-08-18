@@ -7,6 +7,7 @@ from apps.apartment.serializers.change_active import ChangeActiveSerializer
 from apps.apartment.serializers.apartment_serializer import ApartmentSerializer
 from apps.apartment.views.search_views import ApartmentFilter
 from apps.users.permissions.landlord_permissions import IsLandlordOwner
+from sqlalchemy.testing.suite.test_reflection import users
 
 
 class ApartmentCreateAPI(generics.CreateAPIView):
@@ -44,12 +45,11 @@ class ApartmentSearch(generics.ListAPIView):
     filterset_class = ApartmentFilter
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        user = self.request.user
+        queryset = Apartment.objects.filter(is_active=True)
 
-
-        is_active = self.request.query_params.get('is_active', None)
-        if is_active:
-            queryset = queryset.filter(is_active=is_active)
+        if user.is_authenticated:
+            queryset = queryset.exclude(landlord=user)
 
         return queryset
 
