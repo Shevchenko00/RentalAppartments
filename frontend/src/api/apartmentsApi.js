@@ -1,4 +1,8 @@
+import {fetchNewToken} from "@/api/auth";
+
 const productApi = process.env.NEXT_PUBLIC_PRODUCTS_;
+import getCookie from "@/uttils/getCookie/getCookie";
+
 
 export const getApartment = async (token) => {
     const res = await fetch(`${productApi}/apartment/`, {
@@ -93,6 +97,72 @@ export const getMyApartments = async (token) => {
         const error = new Error('Request failed');
         error.status = res.status;
         throw error;
+    }
+
+    return res.json();
+};
+
+
+
+
+
+export const fetchApartment = async (id, router, setApartment, setLoading) => {
+    const token = getCookie('access_token');
+    const refreshToken = getCookie('refresh_token');
+
+    if (!id) {
+        console.warn('ID is missing in URL');
+        router.push('/');
+        return;
+    }
+
+    try {
+        const data = await getApartmentById(id, token);
+        setApartment(data);
+    } catch (error) {
+        if (error.status === 401) {
+            try {
+                await fetchNewToken(refreshToken);
+            } catch (error) {
+                if (error.status === 422 || error.status === 401) {
+                    router.push('/login');
+                    document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                }
+            }
+        }
+    } finally {
+        setLoading(false);
+    }
+};
+
+
+export const updateApartment = async (id, data, token) => {
+    const res = await fetch(`${productApi}/apartment/update_apartment/${id}/`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    });
+
+    if (!res.ok) {
+        throw new Error("Failed to update apartment");
+    }
+
+    return res.json();
+};
+
+export const deleteApartment = async (id, token) => {
+    const res = await fetch(`${productApi}/apartment/update_apartment/${id}/`, {
+        method: "DELETE",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+
+    if (!res.ok) {
+        throw new Error("Failed to delete apartment");
     }
 
     return res.json();

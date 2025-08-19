@@ -48,8 +48,8 @@ class ApartmentSearch(generics.ListAPIView):
         user = self.request.user
         queryset = Apartment.objects.filter(is_active=True)
 
-        if user.is_authenticated:
-            queryset = queryset.exclude(landlord=user)
+        # if user.is_authenticated:
+        #     queryset = queryset.exclude(landlord=user)
 
         return queryset
 

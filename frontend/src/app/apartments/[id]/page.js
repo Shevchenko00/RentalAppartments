@@ -2,12 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { getApartmentById } from '@/api/apartmentsApi';
-import getCookie from '@/uttils/getCookie/getCookie';
+import {fetchApartment} from '@/api/apartmentsApi';
 import styles from './page.module.scss';
-import {fetchNewToken} from "@/api/auth";
 import Loader from "@/components/Loader/Loader";
 import {useLoading} from "@/hooks/useLoader";
+import Button from "@/components/Button/Button";
 
 const ApartmentDetailPage = () => {
     const params = useParams();
@@ -16,38 +15,7 @@ const ApartmentDetailPage = () => {
     const { loading, setLoading } = useLoading();
     const [reviews, setReviews] = useState([])
     useEffect(() => {
-        const fetchApartment = async () => {
-            const token = getCookie('access_token');
-            const id = params?.id;
-            const refreshToken = getCookie('refresh_token')
-
-
-            if (!id) {
-                console.warn('ID is missing in URL');
-                router.push('/');
-                return;
-            }
-
-            try {
-                const data = await getApartmentById(id, token);
-                setApartment(data);
-            } catch (error) {
-                if (error.status === 401) {
-                    try{
-                        await fetchNewToken(refreshToken)
-                    } catch (error) {
-                        if (error.status === 422 || error.status === 401) {
-                            router.push('/login');
-                            document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-                        }
-                    }
-                }
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchApartment();
+        fetchApartment(params?.id, router, setApartment, setLoading);
     }, [params, router]);
 
     if (loading) return <Loader/>;
@@ -113,6 +81,8 @@ const ApartmentDetailPage = () => {
                     <h3>This apartment does not have any reviews.</h3>
                 )}
             </div>
+            <Button text={'Book now'} type={'submit'}></Button>
+
         </div>
 
     )

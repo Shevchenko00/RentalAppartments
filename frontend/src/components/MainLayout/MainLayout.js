@@ -5,9 +5,7 @@ const MainLayout = ({children}) => {
     const links = [
         {title: 'Apartments', href: '/apartments'},
         {title: 'Profile', href: '/profile'},
-        {title: 'My listing', href: '/booking'},
         {title: 'Logout', href: '/logout'}
-
     ];
 
 
