@@ -9,6 +9,7 @@ import {fetchNewToken} from "@/api/auth";
 import {useLoading} from "@/hooks/useLoader";
 import Loader from "@/components/Loader/Loader";
 import {getMyApartments} from "@/api/apartmentsApi";
+import Button from "@/components/Button/Button";
 
 const Profile = () => {
     const router = useRouter();
@@ -99,6 +100,9 @@ const Profile = () => {
                             </div>
                             <h3>{apartments.title}</h3>
                             <p>{apartments.description}</p>
+                            <div className={styles.actions}>
+                                <Button onclick={() => router.push(`/edit/${apartments.id}`)} text={'edit'} />
+                            </div>
                         </div>
                     ))}
                 </div>

@@ -2,6 +2,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 urlpatterns = [
     path('apartment/', include('apps.apartment.urls')),
     path('reservations/', include('apps.reservations.urls')),

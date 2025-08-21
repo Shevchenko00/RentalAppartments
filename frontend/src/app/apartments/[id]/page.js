@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import {useEffect, useState} from 'react';
+import {useParams, useRouter} from 'next/navigation';
 import {fetchApartment} from '@/api/apartmentsApi';
 import styles from './page.module.scss';
 import Loader from "@/components/Loader/Loader";
@@ -12,12 +12,11 @@ const ApartmentDetailPage = () => {
     const params = useParams();
     const router = useRouter();
     const [apartment, setApartment] = useState(null);
-    const { loading, setLoading } = useLoading();
+    const {loading, setLoading} = useLoading();
     const [reviews, setReviews] = useState([])
     useEffect(() => {
         fetchApartment(params?.id, router, setApartment, setLoading);
     }, [params, router]);
-
     if (loading) return <Loader/>;
     if (!apartment) return <p>Apartment not found.</p>;
 
@@ -25,7 +24,7 @@ const ApartmentDetailPage = () => {
         <div className={styles.container}>
             <div className={styles.layout}>
                 <div className={styles.imageBlock}>
-                    <img src={apartment.photo} alt={apartment.title} />
+                    <img src={apartment.photo} alt={apartment.title}/>
                 </div>
 
                 <div className={styles.infoBlock}>
@@ -53,17 +52,19 @@ const ApartmentDetailPage = () => {
             </div>
             <div className={styles.landlordBlock}>
                 <div className={styles.iconWrapper}>
-                    <img src="/images/profileIcon.jpg" alt="icon" width={"94"} height={"94"} />
+                    <img src="/images/profileIcon.jpg" alt="icon" width={"94"} height={"94"}/>
                 </div>
                 <div className={styles.infoWrapper}>
                     <p>
                         <strong>Landlord:</strong> {apartment.landlord.first_name} {apartment.landlord.last_name}
                     </p>
                     <p>
-                        <strong>Phone:</strong> <a href={`tel:${apartment.landlord.phone_number}`}>{apartment.landlord.phone_number}</a>
+                        <strong>Phone:</strong> <a
+                        href={`tel:${apartment.landlord.phone_number}`}>{apartment.landlord.phone_number}</a>
                     </p>
                     <p>
-                        <strong>Email:</strong> <a href={`mailto:${apartment.landlord.email}`}>{apartment.landlord.email}</a>
+                        <strong>Email:</strong> <a
+                        href={`mailto:${apartment.landlord.email}`}>{apartment.landlord.email}</a>
                     </p>
                 </div>
             </div>
@@ -88,4 +89,4 @@ const ApartmentDetailPage = () => {
     )
 }
 
-    export default ApartmentDetailPage;
+export default ApartmentDetailPage;

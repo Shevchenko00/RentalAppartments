@@ -2,10 +2,14 @@
 
 import {useEffect, useState} from "react";
 import {useParams, useRouter} from "next/navigation";
-import {fetchApartment, updateApartment, deleteApartment} from "@/api/apartmentsApi"; // 👈 добавим апи
+import {fetchApartment, updateApartment, deleteApartment} from "@/api/apartmentsApi";
 import {getUserByToken} from "@/api/userApi";
 import getCookie from "@/uttils/getCookie/getCookie";
 import * as styles from './page.module.scss'
+import Modal from "@/components/Modal/Modal";
+import Loader from "@/components/Loader/Loader";
+
+const defaultModal = { open: false, message: "", confirmMode: false, onConfirm: null, onClose: null };
 
 const ApartmentEdit = () => {
     const [apartment, setApartment] = useState(null);
@@ -13,9 +17,17 @@ const ApartmentEdit = () => {
     const [ownerId, setOwnerId] = useState();
     const [loading, setLoading] = useState(true);
 
+    const [modal, setModal] = useState(defaultModal);
+
     const params = useParams();
     const router = useRouter();
     const accessToken = getCookie("access_token");
+
+    const closeModal = () => setModal(defaultModal);
+    const openOk = (message, onOk) =>
+        setModal({ open: true, message, confirmMode: false, onConfirm: onOk || closeModal, onClose: null });
+    const openConfirm = (message, onYes, onNo = closeModal) =>
+        setModal({ open: true, message, confirmMode: true, onConfirm: onYes, onClose: onNo });
 
     useEffect(() => {
         fetchApartment(
@@ -33,10 +45,11 @@ const ApartmentEdit = () => {
         });
     }, []);
 
-    if (loading) return <p className={styles.loading}>Загрузка...</p>;
+    if (loading) return <Loader/>;
+
 
     if (userId?.user_id !== ownerId) {
-        return <h1 className={styles.forbidden}>Нет доступа</h1>;
+        return router.push('/apartments');
     }
 
     const handleSubmit = async (e) => {
@@ -54,124 +67,93 @@ const ApartmentEdit = () => {
         };
 
         try {
-            await updateApartment(params.id, updatedApartment, accessToken); // 👈 PUT запрос
-            alert("Apartment updated successfully!");
-            router.push(`/apartments/${params.id}`);
+            await updateApartment(params.id, updatedApartment, accessToken);
+            openOk("Apartment updated successfully!", () => router.push(`/apartments/${params.id}`));
         } catch (err) {
             console.error(err);
-            alert("Ошибка при сохранении");
+            openOk("Unknown error while save");
         }
     };
 
-    const handleDelete = async () => {
-        if (!confirm("Are you sure you want to delete this apartment?")) return;
-        try {
-            await deleteApartment(params.id, accessToken); // 👈 DELETE запрос
-            alert("Apartment deleted");
-            router.push("/");
-        } catch (err) {
-            console.error(err);
-            alert("Ошибка при удалении");
-        }
+    const handleDelete = () => {
+        openConfirm(
+            "Are you sure you want to delete this apartment?",
+            // Yes:
+            async () => {
+                try {
+                    await deleteApartment(params.id, accessToken);
+                    openOk("Apartment deleted", () => router.push("/profile"));
+                } catch (err) {
+                    console.error(err);
+                    openOk("Unknown error");
+                }
+            }
+        );
     };
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.heading}>Редактирование квартиры</h1>
+            <h1 className={styles.heading}>Apartment Edit</h1>
+
+
 
             <form className={styles.form} onSubmit={handleSubmit}>
                 <label className={styles.label}>
                     Title
-                    <input
-                        className={styles.input}
-                        type="text"
-                        name="title"
-                        defaultValue={apartment?.title}
-                    />
+                    <input className={styles.input} type="text" name="title" defaultValue={apartment?.title} />
                 </label>
 
                 <label className={styles.label}>
                     Description
-                    <textarea
-                        className={styles.textarea}
-                        name="description"
-                        defaultValue={apartment?.description}
-                    />
+                    <textarea className={styles.textarea} name="description" defaultValue={apartment?.description} />
                 </label>
 
                 <div className={styles.row}>
                     <label className={styles.label}>
                         City
-                        <input
-                            className={styles.input}
-                            type="text"
-                            name="city"
-                            defaultValue={apartment?.city}
-                        />
+                        <input className={styles.input} type="text" name="city" defaultValue={apartment?.city} />
                     </label>
                     <label className={styles.label}>
                         Address
-                        <input
-                            className={styles.input}
-                            type="text"
-                            name="street"
-                            defaultValue={apartment?.street}
-                        />
+                        <input className={styles.input} type="text" name="street" defaultValue={apartment?.street} />
                     </label>
                 </div>
 
                 <div className={styles.row}>
                     <label className={styles.label}>
                         Price
-                        <input
-                            className={styles.input}
-                            type="number"
-                            name="price"
-                            defaultValue={apartment?.price}
-                        />
+                        <input className={styles.input} type="number" name="price" defaultValue={apartment?.price} />
                     </label>
-
                     <label className={styles.label}>
                         Count of rooms
-                        <input
-                            className={styles.input}
-                            type="number"
-                            name="count_room"
-                            defaultValue={apartment?.count_room}
-                        />
+                        <input className={styles.input} type="number" name="count_room" defaultValue={apartment?.count_room} />
                     </label>
                 </div>
 
                 <label className={styles.label}>
                     Type of apartment
-                    <input
-                        className={styles.input}
-                        type="text"
-                        name="apartment_type"
-                        defaultValue={apartment?.apartment_type}
-                    />
+                    <input className={styles.input} type="text" name="apartment_type" defaultValue={apartment?.apartment_type} />
                 </label>
 
                 <div className={styles.actions}>
-                    <button type="submit" className={styles.saveBtn}>
-                        Save
-                    </button>
-                    <button
-                        type="button"
-                        className={styles.cancelBtn}
-                        onClick={() => router.push(`/apartments/${params?.id}`)}
-                    >
+                    <button type="submit" className={styles.saveBtn}>Save</button>
+                    <button type="button" className={styles.cancelBtn} onClick={() => router.push(`/apartments/${params?.id}`)}>
                         Cancel
                     </button>
-                    <button
-                        type="button"
-                        className={styles.deleteBtn}
-                        onClick={handleDelete}
-                    >
+                    <button type="button" className={styles.deleteBtn} onClick={handleDelete}>
                         Delete
                     </button>
                 </div>
             </form>
+
+            {modal.open && (
+                <Modal
+                    message={modal.message}
+                    confirmMode={modal.confirmMode}
+                    onConfirm={modal.onConfirm}
+                    onClose={modal.onClose || closeModal}
+                />
+            )}
         </div>
     );
 };

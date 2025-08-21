@@ -165,5 +165,8 @@ export const deleteApartment = async (id, token) => {
         throw new Error("Failed to delete apartment");
     }
 
+    if (res.status === 204 ) {
+        return null;
+    }
     return res.json();
 };
