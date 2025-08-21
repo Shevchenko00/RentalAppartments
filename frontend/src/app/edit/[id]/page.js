@@ -78,7 +78,6 @@ const ApartmentEdit = () => {
     const handleDelete = () => {
         openConfirm(
             "Are you sure you want to delete this apartment?",
-            // Yes:
             async () => {
                 try {
                     await deleteApartment(params.id, accessToken);
@@ -94,7 +93,6 @@ const ApartmentEdit = () => {
     return (
         <div className={styles.container}>
             <h1 className={styles.heading}>Apartment Edit</h1>
-
 
 
             <form className={styles.form} onSubmit={handleSubmit}>
