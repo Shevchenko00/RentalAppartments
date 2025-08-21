@@ -5,37 +5,45 @@ from apps.users.models import User
 
 
 class Apartment(models.Model):
-    title = models.CharField(max_length=50, null=False, blank=False, verbose_name='Заголовок',
-                             help_text='(поле является обязательным)')
-    description = models.TextField(null=False, blank=False, verbose_name='Описание',
-                                   help_text='(поле является обязательным)')
-    apartment_type = models.CharField(max_length=10, null=False, blank=False, verbose_name='Тип жилья', default='Квартира')
-    count_room = models.SmallIntegerField(null=False, verbose_name='Количество комнат', default=1)
-    city = models.CharField(max_length=100, null=False, verbose_name='Город', help_text='(поле является обязательным)')
-    street = models.CharField(max_length=100, null=False, verbose_name='Улица',
-                              help_text='(поле является обязательным)')
-    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена', null=False, blank=True,
-                                default=0.00)
+    title = models.CharField(max_length=50, verbose_name='Заголовок')
+    description = models.TextField(verbose_name='Описание')
+    apartment_type = models.CharField(max_length=10, verbose_name='Тип жилья', default='Квартира')
+    count_room = models.SmallIntegerField(verbose_name='Количество комнат', default=1)
+    city = models.CharField(max_length=100, verbose_name='Город')
+    street = models.CharField(max_length=100, verbose_name='Улица')
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена', default=0.00)
 
-    is_active = models.BooleanField(max_length=10, default=False,
-                                 help_text='(поле является обязательным)', verbose_name='Статус объявления')
+    is_active = models.BooleanField(default=False, verbose_name='Статус объявления')
 
-    photo = models.ImageField(upload_to='apartment_photos/', null=False, blank=True,
-                              verbose_name='Фото', help_text='Загрузите фото квартиры')
+    # ⚡ Лучше разрешить пустое значение, чтобы объявление могло быть без фото
+    photo = models.ImageField(
+        upload_to='apartment_photos/',
+        null=True,   # можно пустое в БД
+        blank=True,  # можно не указывать в админке/формах
+        verbose_name='Главное фото',
+        help_text='Загрузите главное фото квартиры'
+    )
 
-    landlord = models.ForeignKey(User, null=False, blank=False, on_delete=models.CASCADE)
-    def save(self, *args, **kwargs):
-        if not self.landlord_id:
-            self.landlord = kwargs.pop('user', None)
-        super().save(*args, **kwargs)
+    landlord = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
-        indexes = [
-            models.Index(fields=['city', 'street',]),
-        ]
+        indexes = [models.Index(fields=['city', 'street'])]
         db_table = 'Apartment'
         verbose_name = 'Объявление'
         verbose_name_plural = 'Объявления'
 
     def __str__(self):
-        return f'{self.title}, {self.description}'
+        return f'{self.title}, {self.city}'
+
+
+
+class ApartmentPhoto(models.Model):
+    apartment = models.ForeignKey(
+        Apartment,
+        related_name="photos",
+        on_delete=models.CASCADE
+    )
+    photo = models.ImageField(upload_to="apartment_photos/")
+
+    def __str__(self):
+        return f"Photo for {self.apartment.title}"

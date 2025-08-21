@@ -100,7 +100,7 @@ const Apartments = () => {
                             <ApartmentListItem
                                 key={apartment.id}
                                 id={apartment.id}
-                                img={apartment.photo}
+                                img={apartment.photos[0]?.photo}
                                 title={apartment.title}
                                 price={apartment.price}
                                 description={apartment.description}

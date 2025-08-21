@@ -138,19 +138,15 @@ export const fetchApartment = async (id, router, setApartment, setLoading) => {
 
 export const updateApartment = async (id, data, token) => {
     const res = await fetch(`${productApi}/apartment/update_apartment/${id}/`, {
-        method: "PUT",
+        method: "PATCH",
         headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            "Authorization": `Bearer ${token}`,
         },
-        body: JSON.stringify(data)
+        body: data,
+    }).then(res => {
+        if (!res.ok) throw new Error("Failed to update apartment");
+        return res.json();
     });
-
-    if (!res.ok) {
-        throw new Error("Failed to update apartment");
-    }
-
-    return res.json();
 };
 
 export const deleteApartment = async (id, token) => {

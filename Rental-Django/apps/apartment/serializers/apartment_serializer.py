@@ -2,16 +2,25 @@ import os
 
 from rest_framework import serializers
 import requests
-from apps.apartment.models.apartment import Apartment
+from apps.apartment.models.apartment import Apartment, ApartmentPhoto
+
+class ApartmentPhotoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ApartmentPhoto
+        fields = ["id", "photo"]
+
+
+
 class ApartmentSerializer(serializers.ModelSerializer):
     landlord = serializers.SerializerMethodField()
-
+    photos = ApartmentPhotoSerializer(many=True, read_only=True)
     class Meta:
         model = Apartment
         fields = [
             'id', 'title', 'description', 'city', 'street', 'price', 'is_active',
-            'apartment_type', 'count_room', 'landlord', 'photo'
+            'apartment_type', 'count_room', 'landlord', 'photos'
         ]
+        depth = 1
         read_only_fields = ['landlord']
 
     def get_landlord(self, obj):
