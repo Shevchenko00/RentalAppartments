@@ -1,22 +1,20 @@
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
-
+import './MainLatout.scss'
 const MainLayout = ({children}) => {
     const links = [
-        {title: 'Apartments', href: '/apartments'},
-        {title: 'Profile', href: '/profile'},
-        {title: 'Logout', href: '/logout'}
+        { title: 'Apartments', href: '/apartments' },
+        { title: 'Profile', href: '/profile' },
+        { title: 'Logout', href: '/logout' }
     ];
 
-
-
     return (
-        <>
-            <Header links={links}/>
-            {children}
-            <Footer/>
-        </>
-    )
-}
+        <div className="layout">
+            <Header links={links} />
+            <main className="content">{children}</main>
+            <Footer />
+        </div>
+    );
+};
 
 export default MainLayout;

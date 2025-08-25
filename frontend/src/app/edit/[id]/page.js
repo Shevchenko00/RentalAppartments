@@ -47,7 +47,7 @@ const ApartmentEdit = () => {
 
     if (loading) return <Loader />;
 
-    if (userId?.user_id !== ownerId) {
+    if (!loading && userId && ownerId && userId.user_id !== ownerId) {
         router.push('/apartments');
         return null;
     }

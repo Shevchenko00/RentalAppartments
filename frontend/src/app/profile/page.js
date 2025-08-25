@@ -96,7 +96,7 @@ const Profile = () => {
                     {apartments.map((apartments) => (
                         <div key={apartments.id} className={styles.publicationCard}>
                             <div className={styles.cardImage}>
-                                <img src={apartments.photo} alt={apartments.title} />
+                                <img src={apartments.photos[0]?.photo} alt={apartments.title} />
                             </div>
                             <h3>{apartments.title}</h3>
                             <p>{apartments.description}</p>
