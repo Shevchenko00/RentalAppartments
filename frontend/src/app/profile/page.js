@@ -93,7 +93,7 @@ const Profile = () => {
                 <h1 className={styles.title}>My listings</h1>
 
                 <div className={styles.publications}>
-                    {apartments.map((apartments) => (
+                    {apartments.length ? apartments.map((apartments) => (
                         <div key={apartments.id} className={styles.publicationCard}>
                             <div className={styles.cardImage}>
                                 <img src={apartments.photos[0]?.photo} alt={apartments.title} />
@@ -103,8 +103,22 @@ const Profile = () => {
                             <div className={styles.actions}>
                                 <Button onclick={() => router.push(`/edit/${apartments.id}`)} text={'edit'} />
                             </div>
+                            {/*<Button onclick={() => router.push(`/edit/${apartments.id}`)} text={'edit'} />*/}
                         </div>
-                    ))}
+                    )) :<div className={styles.noListing}>
+                        You don't have any listings
+                        <Button
+                            onclick={() => window.open('/createNewApartment/', '_blank')}
+                            text="Create new"
+                        />
+                    </div>
+                    }
+                </div>
+                <div className={styles.noListing}>
+                    <Button
+                        onclick={() => window.open('/createNewApartment/', '_blank')}
+                        text="Create new"
+                    />
                 </div>
             </div>
         </>

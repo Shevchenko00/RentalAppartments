@@ -23,14 +23,12 @@ const ApartmentEdit = () => {
     const router = useRouter();
     const accessToken = getCookie("access_token");
 
-    // --- модалки ---
     const closeModal = () => setModal(defaultModal);
     const openOk = (message, onOk) =>
         setModal({ open: true, message, confirmMode: false, onConfirm: onOk || closeModal, onClose: null });
     const openConfirm = (message, onYes, onNo = closeModal) =>
         setModal({ open: true, message, confirmMode: true, onConfirm: onYes, onClose: onNo });
 
-    // --- загрузка данных ---
     useEffect(() => {
         fetchApartment(
             params?.id,
@@ -63,13 +61,12 @@ const ApartmentEdit = () => {
         formData.append("price", e.target.price.value);
         formData.append("count_room", e.target.count_room.value);
         formData.append("apartment_type", e.target.apartment_type.value);
+        formData.append("is_active", e.target.is_active.checked ? "true" : "false"); // добавлено
 
         const files = e.target.photos.files;
         for (let i = 0; i < files.length; i++) {
             formData.append("photos", files[i]);
         }
-
-
 
         try {
             await updateApartment(params.id, formData, accessToken);
@@ -81,6 +78,7 @@ const ApartmentEdit = () => {
             openOk("Unknown error while saving");
         }
     };
+
 
     const handleDelete = () => {
         openConfirm(
@@ -102,7 +100,6 @@ const ApartmentEdit = () => {
             <h1 className={styles.heading}>Apartment Edit</h1>
 
             <form className={styles.form} onSubmit={handleSubmit}>
-                {/* Фото */}
                 <label className={styles.label}>
                     Photos
                     <input
@@ -114,7 +111,6 @@ const ApartmentEdit = () => {
                     />
                 </label>
 
-                {/* Заголовок */}
                 <label className={styles.label}>
                     Title
                     <input
@@ -125,7 +121,6 @@ const ApartmentEdit = () => {
                     />
                 </label>
 
-                {/* Описание */}
                 <label className={styles.label}>
                     Description
                     <textarea
@@ -135,7 +130,6 @@ const ApartmentEdit = () => {
                     />
                 </label>
 
-                {/* Город + улица */}
                 <div className={styles.row}>
                     <label className={styles.label}>
                         City
@@ -157,7 +151,6 @@ const ApartmentEdit = () => {
                     </label>
                 </div>
 
-                {/* Цена + количество комнат */}
                 <div className={styles.row}>
                     <label className={styles.label}>
                         Price
@@ -179,7 +172,8 @@ const ApartmentEdit = () => {
                     </label>
                 </div>
 
-                {/* Тип квартиры */}
+
+
                 <label className={styles.label}>
                     Type of apartment
                     <input
@@ -189,8 +183,16 @@ const ApartmentEdit = () => {
                         defaultValue={apartment?.apartment_type}
                     />
                 </label>
+                <label className={styles.label}>
+                    Active
+                    <input
+                        className={styles.input}
+                        type="checkbox"
+                        name="is_active"
+                        defaultChecked={apartment?.is_active ?? true}
+                    />
+                </label>
 
-                {/* Кнопки */}
                 <div className={styles.actions}>
                     <button type="submit" className={styles.saveBtn}>Save</button>
                     <button
@@ -208,9 +210,9 @@ const ApartmentEdit = () => {
                         Delete
                     </button>
                 </div>
+
             </form>
 
-            {/* Модалка */}
             {modal.open && (
                 <Modal
                     message={modal.message}

@@ -16,6 +16,9 @@ class ApartmentCreateAPI(generics.CreateAPIView):
     queryset = Apartment.objects.all()
     serializer_class = ApartmentSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(landlord=self.request.user)
+
 
 class ApartmentDetailAPI(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]

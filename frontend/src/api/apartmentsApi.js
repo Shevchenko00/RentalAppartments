@@ -166,3 +166,18 @@ export const deleteApartment = async (id, token) => {
     }
     return res.json();
 };
+
+
+
+export const createApartment = async (data, token) => {
+    const res = await fetch(`${productApi}/apartment/create_apartment/`, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+        },
+        body: data,
+    }).then(res => {
+        if (!res.ok) throw new Error("Failed to update apartment");
+        return res.json();
+    });
+};

@@ -15,11 +15,10 @@ class Apartment(models.Model):
 
     is_active = models.BooleanField(default=False, verbose_name='Статус объявления')
 
-    # ⚡ Лучше разрешить пустое значение, чтобы объявление могло быть без фото
     photo = models.ImageField(
         upload_to='apartment_photos/',
-        null=True,   # можно пустое в БД
-        blank=True,  # можно не указывать в админке/формах
+        null=True,
+        blank=True,
         verbose_name='Главное фото',
         help_text='Загрузите главное фото квартиры'
     )

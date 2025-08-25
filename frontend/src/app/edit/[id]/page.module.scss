@@ -23,10 +23,17 @@
 
 .label {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   font-size: 14px;
   font-weight: 500;
   color: #444;
+  gap: 8px;
+}
+
+.label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin-top: 0;
 }
 
 .input,
@@ -60,6 +67,14 @@
   justify-content: flex-end;
   gap: 12px;
   margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.saveBtn,
+.cancelBtn,
+.deleteBtn {
+  flex: 1 1 auto;
+  min-width: 120px;
 }
 
 .saveBtn {
@@ -91,6 +106,7 @@
     background-color: #e0e0e0;
   }
 }
+
 .deleteBtn {
   background-color: rgba(255, 2, 2, 0.51);
   color: #333;
@@ -106,7 +122,8 @@
   }
 }
 
-.loading {
+.loading,
+.forbidden {
   text-align: center;
   padding: 40px;
   font-size: 16px;
@@ -114,11 +131,11 @@
 }
 
 .forbidden {
-  text-align: center;
   margin-top: 50px;
   font-size: 20px;
   color: #c00;
 }
+
 .previews {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
@@ -163,5 +180,27 @@
 
   &:hover {
     background: rgba(255, 0, 0, 0.8);
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    margin: 20px 16px;
+    padding: 20px;
+  }
+
+  .heading {
+    font-size: 20px;
+  }
+
+  .row {
+    flex-direction: column;
+  }
+
+  .saveBtn,
+  .cancelBtn,
+  .deleteBtn {
+    min-width: unset;
+    width: 100%;
   }
 }
