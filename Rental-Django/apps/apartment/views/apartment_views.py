@@ -21,6 +21,12 @@ class ApartmentCreateAPI(generics.CreateAPIView):
         apartment = serializer.save()
 
         photos = self.request.FILES.getlist("photos")
+        title_photo = self.request.FILES.get("title_photo")
+
+        if title_photo:
+            apartment.title_photo = title_photo
+            apartment.save(update_fields=["title_photo"])
+
         if photos:
             apartment.photos.all().delete()
 

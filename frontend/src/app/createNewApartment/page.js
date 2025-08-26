@@ -4,8 +4,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import * as styles from "@/app/edit/[id]/page.module.scss";
 import Modal from "@/components/Modal/Modal";
-import {createApartment, updateApartment} from "@/api/apartmentsApi";
+import {createApartment} from "@/api/apartmentsApi";
 import getCookie from "@/uttils/getCookie/getCookie";
+import {fetchNewToken} from "@/api/auth";
 
 const CreateNewApartment = () => {
     const router = useRouter();
@@ -25,6 +26,11 @@ const CreateNewApartment = () => {
         formData.append("apartment_type", e.target.apartment_type.value);
         formData.append("is_active", e.target.is_active.checked ? "true" : "false");
 
+        const titlePhotoInput = e.target.titlePhoto;
+        if (titlePhotoInput && titlePhotoInput.files.length > 0) {
+            formData.append("title_photo", titlePhotoInput.files[0]);
+        }
+
 
         const files = e.target.photos.files;
         console.log(files.length)
@@ -34,18 +40,50 @@ const CreateNewApartment = () => {
 
         try {
             await createApartment(formData, accessToken);
-                router.push(`/profile`)
+            router.push(`/profile`)
         } catch (err) {
             console.error(err);
+
+            const status = err?.status || err?.response?.status;
+            if (status === 401) {
+                try {
+                    const refreshToken = getCookie("refresh_token");
+                    if (!refreshToken) throw new Error("No refresh token available");
+
+                    await fetchNewToken(refreshToken);
+
+                    const newAccessToken = getCookie("access_token");
+                    await createApartment(formData, newAccessToken);
+
+                    router.push(`/profile`);
+                } catch (refreshError) {
+                    console.error("Token refresh failed:", refreshError);
+                    document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    document.cookie = 'refresh_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    router.push('/login');
+                }
+            } else {
+                openOk("Unknown error while saving");
+            }
         }
-    };
+    }
 
 
-    return (
+        return (
         <div className={styles.container}>
             <h1 className={styles.heading}>Create New Apartment</h1>
 
             <form className={styles.form} onSubmit={handleSubmit}>
+                <label className={styles.label}>
+                    Photo for title
+                    <input
+                        className={styles.input}
+                        type="file"
+                        name="titlePhoto"
+                        accept="image/*"
+
+                    />
+                </label>
                 <label className={styles.label}>
                     Photos
                     <input

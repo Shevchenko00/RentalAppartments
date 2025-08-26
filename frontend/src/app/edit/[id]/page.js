@@ -75,10 +75,32 @@ const ApartmentEdit = () => {
             );
         } catch (err) {
             console.error(err);
-            openOk("Unknown error while saving");
-        }
-    };
 
+            // Если сервер вернул 401, пробуем обновить токен
+            if (err.status === 401) {
+                try {
+                    const refreshToken = getCookie("refresh_token");
+                    if (!refreshToken) throw new Error("No refresh token available");
+
+                    await fetchNewToken(refreshToken);
+
+                    const newAccessToken = getCookie("access_token");
+                    await updateApartment(params.id, formData, newAccessToken);
+
+                    openOk("Apartment updated successfully after token refresh!", () =>
+                        router.push(`/apartments/${params.id}`)
+                    );
+                } catch (refreshError) {
+                    console.error("Token refresh failed:", refreshError);
+                    document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    document.cookie = 'refresh_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    router.push('/login');
+                }
+            } else {
+                openOk("Unknown error while saving");
+            }
+        }
+    }
 
     const handleDelete = () => {
         openConfirm(

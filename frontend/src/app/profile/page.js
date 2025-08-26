@@ -18,12 +18,11 @@ const Profile = () => {
     const {loading, setLoading} = useLoading();
     const [apartments, setApartments] = useState([])
     const token = getCookie('access_token');
+    const refreshToken = getCookie('refresh_token')
 
     useEffect(() => {
         const fetchUserId = async () => {
             setLoading(true);
-            const refreshToken = getCookie('refresh_token');
-
             try {
                 const data = await getUserByToken(token);
                 setUserId(data.user_id);
@@ -33,10 +32,11 @@ const Profile = () => {
                         await fetchNewToken(refreshToken);
                         const newData = await getUserByToken(getCookie('access_token'));
                         setUserId(newData.user_id);
-                    } catch (refreshError) {
-                        document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-                        document.cookie = 'refresh_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-                        router.push('/login');
+                    } catch (error) {
+                        if (error.status === 422 || error.status === 401) {
+                            router.push('/login');
+                            document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                        }
                     }
                 }
             } finally {
@@ -96,8 +96,12 @@ const Profile = () => {
                     {apartments.length ? apartments.map((apartments) => (
                         <div key={apartments.id} className={styles.publicationCard}>
                             <div className={styles.cardImage}>
-                                <img src={apartments.photos[0]?.photo} alt={apartments.title} />
-                            </div>
+                                {apartments.title_photo !== null ?
+                                    <img src={apartments.title_photo} alt={apartments.title} /> :
+                                    <img src={apartments.photos[0]?.photo} alt={apartments.title}/>
+                            }
+
+                        </div>
                             <h3>{apartments.title}</h3>
                             <p>{apartments.description}</p>
                             <div className={styles.actions}>

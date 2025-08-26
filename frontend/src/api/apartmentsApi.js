@@ -176,11 +176,8 @@ export const createApartment = async (data, token) => {
             Authorization: `Bearer ${token}`,
         },
         body: data,
+    }).then(res => {
+        if (!res.ok) throw new Error("Failed to create apartment");
+        return res.json();
     });
-
-    if (!response.ok) {
-        throw new Error("Failed to create apartment");
-    }
-
-    return response.json();
 };

@@ -23,7 +23,6 @@ const ApartmentDetailPage = () => {
     if (loading) return <Loader/>;
     if (!apartment) return <p>Apartment not found.</p>;
 
-    // Настройки для слайдера
     const sliderSettings = {
         dots: true,
         infinite: true,
@@ -37,18 +36,25 @@ const ApartmentDetailPage = () => {
         <div className={styles.container}>
             <div className={styles.layout}>
                 <div className={styles.imageBlock}>
-                    {apartment.photos && apartment.photos.length > 0 ? (
+                    {apartment.title_photo || (apartment.photos && apartment.photos.length > 0) ? (
                         <Slider {...sliderSettings}>
-                            {apartment.photos.map((photo, index) => (
+                            {apartment.title_photo && (
+                                <div className={styles.slide}>
+                                    <img src={apartment.title_photo} alt={`${apartment.title} - main`} />
+                                </div>
+                            )}
+
+                            {apartment.photos?.map((photo, index) => (
                                 <div key={index} className={styles.slide}>
                                     <img src={photo.photo} alt={`${apartment.title} - ${index+1}`} />
                                 </div>
                             ))}
                         </Slider>
                     ) : (
-                        <img src={apartment.photo} alt={apartment.title}/>
+                        <img src="/images/no-image.png" alt="No image available" />
                     )}
                 </div>
+
 
                 <div className={styles.infoBlock}>
                     <h1>{apartment.title}</h1>
