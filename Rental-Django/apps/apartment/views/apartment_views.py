@@ -12,12 +12,20 @@ from sqlalchemy.testing.suite.test_reflection import users
 
 
 class ApartmentCreateAPI(generics.CreateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     queryset = Apartment.objects.all()
     serializer_class = ApartmentSerializer
 
     def perform_create(self, serializer):
         serializer.save(landlord=self.request.user)
+        apartment = serializer.save()
+
+        photos = self.request.FILES.getlist("photos")
+        if photos:
+            apartment.photos.all().delete()
+
+            for photo in photos:
+                ApartmentPhoto.objects.create(apartment=apartment, photo=photo)
 
 
 class ApartmentDetailAPI(generics.RetrieveAPIView):
@@ -28,7 +36,7 @@ class ApartmentDetailAPI(generics.RetrieveAPIView):
 
 
 class ApartmentUpdateDeleteAPI(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsLandlordOwner]
     parser_classes = (MultiPartParser, FormParser)
     queryset = Apartment.objects.all()
     serializer_class = ApartmentSerializer

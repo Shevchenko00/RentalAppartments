@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import * as styles from "@/app/edit/[id]/page.module.scss";
 import Modal from "@/components/Modal/Modal";
-import { createApartment } from "@/api/apartmentsApi";
+import {createApartment, updateApartment} from "@/api/apartmentsApi";
 import getCookie from "@/uttils/getCookie/getCookie";
 
 const CreateNewApartment = () => {
@@ -14,22 +14,32 @@ const CreateNewApartment = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const formData = new FormData(e.target);
+        const formData = new FormData();
+
+        formData.append("title", e.target.title.value);
+        formData.append("description", e.target.description.value);
+        formData.append("city", e.target.city.value);
+        formData.append("street", e.target.street.value);
+        formData.append("price", e.target.price.value);
+        formData.append("count_room", e.target.count_room.value);
+        formData.append("apartment_type", e.target.apartment_type.value);
+        formData.append("is_active", e.target.is_active.checked ? "true" : "false");
+
+
+        const files = e.target.photos.files;
+        console.log(files.length)
+        for (let i = 0; i < files.length; i++) {
+            formData.append("photos", files[i]);
+        }
 
         try {
             await createApartment(formData, accessToken);
-            router.push('/apartments');
-        } catch (error) {
-            setModal({
-                open: true,
-                message: 'Failed to create apartment. Please try again.',
-                confirmMode: false,
-                onConfirm: null
-            });
+                router.push(`/profile`)
+        } catch (err) {
+            console.error(err);
         }
     };
 
-    const closeModal = () => setModal({ ...modal, open: false });
 
     return (
         <div className={styles.container}>

@@ -13,15 +13,22 @@ class ApartmentPhotoSerializer(serializers.ModelSerializer):
 
 class ApartmentSerializer(serializers.ModelSerializer):
     landlord = serializers.SerializerMethodField()
-    photos = ApartmentPhotoSerializer(many=True, read_only=True)
+    photos = ApartmentPhotoSerializer(many=True, required=False)
     class Meta:
         model = Apartment
         fields = [
             'id', 'title', 'description', 'city', 'street', 'price', 'is_active',
-            'apartment_type', 'count_room', 'landlord', 'photos'
+            'apartment_type', 'count_room', 'landlord', 'photos', 'title_photo'
         ]
         depth = 1
         read_only_fields = ['landlord']
+
+    def create(self, validated_data):
+        photos = validated_data.pop("photos", [])
+        apartment = super().create(validated_data)
+        for photo in photos:
+            ApartmentPhoto.objects.create(apartment=apartment, image=photo)
+        return apartment
 
     def get_landlord(self, obj):
         try:
@@ -39,3 +46,4 @@ class ApartmentSerializer(serializers.ModelSerializer):
             return {"id": user_id, "error": "User not found"}
         except Exception as e:
             return {"error": str(e)}
+

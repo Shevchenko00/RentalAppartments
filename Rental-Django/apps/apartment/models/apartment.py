@@ -12,10 +12,9 @@ class Apartment(models.Model):
     city = models.CharField(max_length=100, verbose_name='Город')
     street = models.CharField(max_length=100, verbose_name='Улица')
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена', default=0.00)
-
     is_active = models.BooleanField(default=False, verbose_name='Статус объявления')
 
-    photo = models.ImageField(
+    title_photo = models.ImageField(
         upload_to='apartment_photos/',
         null=True,
         blank=True,
