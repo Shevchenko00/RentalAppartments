@@ -73,12 +73,13 @@ export const getFiltredResult = async (
 };
 
 
-export const getMyApartments = async (token) => {
-    const res = await fetch(`${productApi}/apartment/my_apartments/`, {
+export const getMyApartments = async (token, page = 1) => {
+    const res = await fetch(`${productApi}/apartment/my_apartments/?page=${page}`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
     });
+
     if (res.status === 401) {
         const error = new Error('Unauthorized');
         error.status = 401;
@@ -91,8 +92,9 @@ export const getMyApartments = async (token) => {
         throw error;
     }
 
-    return res.json();
+    return res.json(); // DRF возвращает { count, next, previous, results }
 };
+
 
 
 

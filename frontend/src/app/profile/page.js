@@ -19,6 +19,12 @@ const Profile = () => {
     const [apartments, setApartments] = useState([])
     const token = getCookie('access_token');
     const refreshToken = getCookie('refresh_token')
+    const [page, setPage] = useState(1);
+    const [count, setCount] = useState(0);
+    const [next, setNext] = useState(null);
+    const [previous, setPrevious] = useState(null);
+
+
 
     useEffect(() => {
         const fetchUserId = async () => {
@@ -48,16 +54,23 @@ const Profile = () => {
     }, [router, setLoading]);
 
     useEffect(() => {
+        // функция для загрузки данных
         const fetchUserByIdData = async () => {
-            if (!userId) return;
+            if (!userId) return; // если userId ещё нет — выходим
 
             try {
+                // Получаем пользователя
                 const data = await getUserById(userId);
-                const apartmentsData = await getMyApartments(token)
                 setUser(data);
-                setApartments(apartmentsData)
-                console.log(apartments)
+
+                // Получаем квартиры с пагинацией
+                const apartmentsData = await getMyApartments(token, page);
+                setApartments(apartmentsData.results); // всегда перезаписываем
+                setCount(apartmentsData.count);
+                setNext(apartmentsData.next);
+                setPrevious(apartmentsData.previous);
             } catch (error) {
+                // при ошибке сбрасываем токены и редиректим
                 document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
                 document.cookie = 'refresh_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
                 router.push('/login');
@@ -65,7 +78,9 @@ const Profile = () => {
         };
 
         fetchUserByIdData();
-    }, [userId, router]);
+    }, [userId, page, router]); // только константные зависимости
+
+
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -117,6 +132,24 @@ const Profile = () => {
                         />
                     </div>
                     }
+
+                </div>
+                <div className={styles.pagination}>
+                    <button
+                        disabled={!previous}
+                        onClick={() => setPage(p => Math.max(1, p - 1))}
+                    >
+                        Prev
+                    </button>
+
+                    <span>{page} / {Math.ceil(count / 10)}</span>
+
+                    <button
+                        disabled={!next}
+                        onClick={() => setPage(p => p + 1)}
+                    >
+                        Next
+                    </button>
                 </div>
                 <div className={styles.noListing}>
                     <Button
