@@ -4,27 +4,19 @@ const productApi = process.env.NEXT_PUBLIC_PRODUCTS_;
 import getCookie from "@/uttils/getCookie/getCookie";
 
 
-export const getApartment = async (token) => {
-    const res = await fetch(`${productApi}/apartment/`, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
-
-    if (res.status === 401) {
-        const error = new Error('Unauthorized');
-        error.status = 401;
-        throw error;
-    }
-
-    if (!res.ok) {
-        const error = new Error('Request failed');
-        error.status = res.status;
-        throw error;
-    }
-
+export const getApartment = async (token, page = 1) => {
+    const res = await fetch(
+        `${productApi}/apartment/?page=${page}`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+    if (!res.ok) throw { status: res.status };
     return res.json();
 };
+
 
 export const getApartmentById = async (id, token) => {
     const res = await fetch(`${productApi}/apartment/${id}/`, {
