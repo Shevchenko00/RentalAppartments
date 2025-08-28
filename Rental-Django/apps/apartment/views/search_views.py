@@ -4,7 +4,7 @@ from apps.apartment.models import Apartment
 
 
 class ApartmentFilter(django_filters.FilterSet):
-    title = django_filters.CharFilter(field_name='title',lookup_expr='icontains')
+    city = django_filters.CharFilter(field_name='title',lookup_expr='icontains')
     description = django_filters.CharFilter(field_name='description',lookup_expr='icontains')
     min_price = django_filters.NumberFilter(field_name="price", lookup_expr='gte')
     max_price = django_filters.NumberFilter(field_name="price", lookup_expr='lte')

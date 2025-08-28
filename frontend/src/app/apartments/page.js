@@ -15,8 +15,8 @@ const initialState = {
     minPrice: "",
     maxPrice: "",
     search: "",
-    minRoom: "",
-    maxRoom: "",
+    minRooms: "",
+    maxRooms: "",
     city: ""
 };
 const resetFilters = () => {
@@ -30,10 +30,10 @@ function reducer(state, action) {
             return { ...state, minPrice: action.value };
         case "setMaxPrice":
             return { ...state, maxPrice: action.value };
-        case "setMinRoom":
-            return  {...state, minRoom: action.value}
-        case "setMaxRoom":
-            return  {...state, maxRoom: action.value}
+        case "setMinRooms":
+            return  {...state, minRooms: action.value}
+        case "setMaxRooms":
+            return  {...state, maxRooms: action.value}
         case "setCity":
             return { ...state, city: action.value };
         case "setSearch":
@@ -52,7 +52,6 @@ const Apartments = () => {
     const [apartments, setApartments] = useState([]);
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    // NEW: Пагинация
     const [page, setPage] = useState(1);
     const [count, setCount] = useState(0);
     const [next, setNext] = useState(null);
@@ -64,7 +63,7 @@ const Apartments = () => {
 
         const fetchApartments = async () => {
             try {
-                const data = await getApartment(accessToken, page); // ← передаём page
+                const data = await getApartment(accessToken, page);
                 setApartments(data.results);
                 setCount(data.count);
                 setNext(data.next);
@@ -156,20 +155,20 @@ const Apartments = () => {
                             <div className={styles.filter}>
                                 <h1>Number of rooms</h1>
                                 <div className={styles.inputs}>
-                                    <input type='number' min='0' value={state.minRoom}
+                                    <input type='number' min='0' value={state.minRooms}
                                            placeholder="min"
                                            onChange={(e) => {
                                                const value = e.target.value;
                                                if (value === "" || Number(value) >= 0) {
-                                                   dispatch({ type: "setMinRoom", value });
+                                                   dispatch({ type: "setMinRooms", value });
                                                }}}
                                     />
-                                    <input type='number' min='0' value={state.maxRoom}
+                                    <input type='number' min='0' value={state.maxRooms}
                                            placeholder="max"
                                            onChange={(e) => {
                                                const value = e.target.value;
                                                if (value === "" || Number(value) >= 0) {
-                                                   dispatch({ type: "setMaxRoom", value });
+                                                   dispatch({ type: "setMaxRooms", value });
                                                }}}
                                     />
                                 </div>
@@ -196,8 +195,8 @@ const Apartments = () => {
                                             const data = await getFiltredResult(
                                                 state.minPrice,
                                                 state.maxPrice,
-                                                state.minRoom,
-                                                state.maxRoom,
+                                                state.minRooms,
+                                                state.maxRooms,
                                                 state.city,
                                                 token,
                                                 page

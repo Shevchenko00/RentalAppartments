@@ -46,17 +46,17 @@ export const getApartmentById = async (id, token) => {
 export const getFiltredResult = async (
     minPrice,
     maxPrice,
-    minRoom,
-    maxRoom,
+    minRooms,
+    maxRooms,
     city,
     token
 ) => {
     const params = new URLSearchParams();
     if (minPrice) params.append("min_price", minPrice);
     if (maxPrice) params.append("max_price", maxPrice);
-    if (minRoom) params.append("min_room", minRoom);
-    if (maxRoom) params.append("max_room", maxRoom);
-    // if (city) params.append("city", city);
+    if (minRooms) params.append("min_rooms", minRooms);
+    if (maxRooms) params.append("max_rooms", maxRooms);
+    if (city) params.append("city", city);
 
     const res = await fetch(`${productApi}/apartment/?${params.toString()}`, {
         cache: "no-store",
@@ -66,7 +66,7 @@ export const getFiltredResult = async (
     });
 
     if (!res.ok) {
-        throw new Error(`Ошибка загрузки: ${res.status}`);
+        throw new Error(`Loading error: ${res.status}`);
     }
 
     return await res.json();
@@ -92,7 +92,7 @@ export const getMyApartments = async (token, page = 1) => {
         throw error;
     }
 
-    return res.json(); // DRF возвращает { count, next, previous, results }
+    return res.json();
 };
 
 
