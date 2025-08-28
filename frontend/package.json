@@ -9,9 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "date-fns": "^4.1.0",
     "framer-motion": "^11.18.2",
     "next": "15.3.5",
     "react": "^19.0.0",
+    "react-datepicker": "^8.7.0",
     "react-dom": "^19.0.0",
     "react-intersection-observer": "^9.16.0",
     "react-slick": "^0.31.0",

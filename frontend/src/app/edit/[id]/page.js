@@ -61,7 +61,7 @@ const ApartmentEdit = () => {
         formData.append("price", e.target.price.value);
         formData.append("count_room", e.target.count_room.value);
         formData.append("apartment_type", e.target.apartment_type.value);
-        formData.append("is_active", e.target.is_active.checked ? "true" : "false"); // добавлено
+        formData.append("is_active", e.target.is_active.checked ? "true" : "false");
 
         const files = e.target.photos.files;
         for (let i = 0; i < files.length; i++) {
@@ -76,7 +76,6 @@ const ApartmentEdit = () => {
         } catch (err) {
             console.error(err);
 
-            // Если сервер вернул 401, пробуем обновить токен
             if (err.status === 401) {
                 try {
                     const refreshToken = getCookie("refresh_token");

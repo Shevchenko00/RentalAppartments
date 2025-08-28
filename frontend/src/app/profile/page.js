@@ -106,7 +106,10 @@ const Profile = () => {
                 <p className={styles.infoItem}><strong>Email:</strong> {user.email}</p>
                 <p className={styles.infoItem}><strong>Phone:</strong> {user.phone_number}</p>
                 <h1 className={styles.title}>My listings</h1>
-
+                <Button
+                    onclick={() => window.open('/createNewApartment/', '_blank')}
+                    text="Create new"
+                />
                 <div className={styles.publications}>
                     {apartments.length ? apartments.map((apartments) => (
                         <div key={apartments.id} className={styles.publicationCard}>
@@ -117,6 +120,7 @@ const Profile = () => {
                             }
 
                         </div>
+
                             <h3>{apartments.title}</h3>
                             <p>{apartments.description}</p>
                             <div className={styles.actions}>
@@ -146,16 +150,11 @@ const Profile = () => {
 
                     <button
                         disabled={!next}
-                        onClick={() => setPage(p => p + 1)}
+                        onClick={() => setPage(p => Math.max(1, p + 1))}
                     >
                         Next
                     </button>
-                </div>
-                <div className={styles.noListing}>
-                    <Button
-                        onclick={() => window.open('/createNewApartment/', '_blank')}
-                        text="Create new"
-                    />
+
                 </div>
             </div>
         </>

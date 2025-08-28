@@ -11,6 +11,7 @@ class Reservation(models.Model):
     start_date = models.DateField(verbose_name='Start date', null=False, blank=False)
     end_date = models.DateField(verbose_name='End date', null=False, blank=False)
     comment = models.TextField(verbose_name='Comment', null=True, blank=True)
+    guests = models.IntegerField(null=False, default=1)
     is_canceled = models.BooleanField(default=False, verbose_name='Is canceled')
     is_approved = models.BooleanField(default=False)
     class Meta:

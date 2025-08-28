@@ -93,7 +93,7 @@ const ApartmentDetailPage = () => {
                 )}
             </div>
 
-            <Button text={'Book now'} type={'submit'} />
+            <Button text={'Book now'} type={'submit'} onclick={() => router.push(`/reservation/${params?.id}`)}/>
         </div>
     )
 }
