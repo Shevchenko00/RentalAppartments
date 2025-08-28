@@ -3,9 +3,10 @@ import Footer from "@/components/Footer/Footer";
 import './MainLatout.scss'
 const MainLayout = ({children}) => {
     const links = [
+        {title: 'Reservations', href: '/reservation'},
         { title: 'Apartments', href: '/apartments' },
         { title: 'Profile', href: '/profile' },
-        { title: 'Logout', href: '/logout' }
+        { title: 'Logout', href: '/logout' },
     ];
 
     return (

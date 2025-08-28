@@ -54,23 +54,19 @@ const Profile = () => {
     }, [router, setLoading]);
 
     useEffect(() => {
-        // функция для загрузки данных
         const fetchUserByIdData = async () => {
-            if (!userId) return; // если userId ещё нет — выходим
+            if (!userId) return;
 
             try {
-                // Получаем пользователя
                 const data = await getUserById(userId);
                 setUser(data);
 
-                // Получаем квартиры с пагинацией
                 const apartmentsData = await getMyApartments(token, page);
-                setApartments(apartmentsData.results); // всегда перезаписываем
+                setApartments(apartmentsData.results);
                 setCount(apartmentsData.count);
                 setNext(apartmentsData.next);
                 setPrevious(apartmentsData.previous);
             } catch (error) {
-                // при ошибке сбрасываем токены и редиректим
                 document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
                 document.cookie = 'refresh_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
                 router.push('/login');
@@ -78,7 +74,7 @@ const Profile = () => {
         };
 
         fetchUserByIdData();
-    }, [userId, page, router]); // только константные зависимости
+    }, [userId, page, router]);
 
 
 
@@ -126,7 +122,6 @@ const Profile = () => {
                             <div className={styles.actions}>
                                 <Button onclick={() => router.push(`/edit/${apartments.id}`)} text={'edit'} />
                             </div>
-                            {/*<Button onclick={() => router.push(`/edit/${apartments.id}`)} text={'edit'} />*/}
                         </div>
                     )) :<div className={styles.noListing}>
                         You don't have any listings

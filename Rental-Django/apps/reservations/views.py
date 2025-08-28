@@ -48,6 +48,18 @@ class CheckReservationView(generics.ListAPIView):
             return Reservation.objects.filter(user=user, is_canceled=False)
         return Reservation.objects.none()
 
+class LandlordReservationListView(generics.ListAPIView):
+    serializer_class = ReservationSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        if not user.is_authenticated:
+            return Reservation.objects.none()
+
+        return Reservation.objects.filter(
+            Apartment__landlord=user
+        ).order_by("-start_date")
+
 
 class CancelReservationView(generics.UpdateAPIView):
     serializer_class = CancelSerializer
