@@ -22,9 +22,6 @@ export const getUserByToken = async (token) => {
 export const getUserById = async (id) => {
     const res = await fetch(`${authUrl}/users/${id}`, {
         cache: 'no-store',
-        // headers: {
-        //     Authorization: `Bearer ${token}`,
-        // },
     });
 
     if (!res.ok) {

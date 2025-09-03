@@ -7,7 +7,9 @@ import styles from './page.module.scss';
 import Loader from "@/components/Loader/Loader";
 import {useLoading} from "@/hooks/useLoader";
 import Button from "@/components/Button/Button";
-import Slider from "react-slick"; // слайдер
+import Slider from "react-slick";
+import {getUserByToken} from "@/api/userApi";
+import getCookie from "@/uttils/getCookie/getCookie";
 
 const ApartmentDetailPage = () => {
     const params = useParams();
@@ -15,12 +17,30 @@ const ApartmentDetailPage = () => {
     const [apartment, setApartment] = useState(null);
     const {loading, setLoading} = useLoading();
     const [reviews, setReviews] = useState([]);
+    const accessToken = getCookie('access_token')
+    const [userId, setUserId] = useState()
+
 
     useEffect(() => {
         fetchApartment(params?.id, router, setApartment, setLoading);
-    }, [params, router]);
 
-    if (loading) return <Loader/>;
+        getUserByToken(accessToken).then(r => setUserId(r.user_id));
+    }, [params?.id, router, accessToken]);
+
+    useEffect(() => {
+        console.log("apartment:", apartment);
+        console.log("userId:", userId, typeof userId);
+        console.log("landlordId:", apartment?.landlord?.id, typeof apartment?.landlord?.id);
+
+        if (apartment && userId && userId === apartment?.landlord?.id) {
+            console.log('✅ Пользователь = владелец квартиры');
+        } else {
+            console.log('❌ Условие не выполнено');
+        }
+    }, [apartment, userId]);
+
+
+    if (loading && !userId) return <Loader/>;
     if (!apartment) return <p>Apartment not found.</p>;
 
     const sliderSettings = {
@@ -93,7 +113,15 @@ const ApartmentDetailPage = () => {
                 )}
             </div>
 
-            <Button text={'Book now'} type={'submit'} onclick={() => router.push(`/reservation/${params?.id}`)}/>
+            { userId === apartment?.landlord?.id? (
+                <Button text={'Edit'} type={'submit'} onclick={() => router.push(`/edit/${params?.id}`)} />
+                         ) : (
+                <Button text={'Book now'} type={'submit'} onclick={() => router.push(`/reservation/${params?.id}`)} />
+
+                )
+
+
+            }
         </div>
     )
 }

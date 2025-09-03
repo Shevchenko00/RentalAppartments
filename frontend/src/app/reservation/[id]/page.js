@@ -1,4 +1,6 @@
 'use client'
+import {getUserByToken} from "@/api/userApi";
+
 const productApi = process.env.NEXT_PUBLIC_PRODUCTS_;
 
 import {useParams, useRouter} from "next/navigation";
@@ -20,6 +22,7 @@ const Reservation = () => {
     const [reservations, setReservations] = useState([]);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
+    const [userId, setUserId] = useState();
 
     const router = useRouter();
     const params = useParams();
@@ -40,6 +43,8 @@ const Reservation = () => {
             }
         };
         fetchReservations();
+        getUserByToken(accessToken).then((res) => setUserId(res));
+
     }, [params.id]);
 
     const bookedDates = reservations.flatMap(res => {
@@ -81,7 +86,6 @@ const Reservation = () => {
             setLoading(false);
         }
     };
-
     if (loading) return <Loader />;
 
     return (

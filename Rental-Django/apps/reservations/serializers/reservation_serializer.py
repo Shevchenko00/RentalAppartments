@@ -17,4 +17,4 @@ class ReservationSerializer(serializers.ModelSerializer):
     apartment = ApartmentInfoSerializer(source='Apartment', read_only=True)
     class Meta:
         model = Reservation
-        fields = ['id', 'start_date', 'end_date', 'guests', 'comment', 'is_approved', 'apartment']
+        fields = ['id', 'start_date', 'end_date', 'guests', 'comment', 'is_approved', 'apartment', 'landlord']

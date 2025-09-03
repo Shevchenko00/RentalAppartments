@@ -37,7 +37,8 @@ const ApartmentEdit = () => {
                 setApartment(data);
                 setOwnerId(data.landlord?.id);
             },
-            setLoading
+
+        setLoading
         );
 
         getUserByToken(accessToken).then((res) => setUserId(res));
