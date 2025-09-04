@@ -105,7 +105,6 @@ export const fetchApartment = async (id, router, setApartment, setLoading) => {
     const refreshToken = getCookie('refresh_token');
 
     if (!id) {
-        console.warn('ID is missing in URL');
         router.push('/');
         return;
     }

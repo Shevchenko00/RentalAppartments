@@ -36,16 +36,29 @@ const Reservation = () => {
         const fetchReservations = async () => {
             try {
                 const res = await fetch(`${productApi}/reservations/booked_date/${params.id}/`);
+
+                if (res.status === 404) {
+                    // если апартамента нет → редиректим или показываем ошибку
+                    router.push('/404'); // можно сделать отдельную страницу 404
+                    return;
+                }
+
+                if (!res.ok) {
+                    throw new Error(`Ошибка при загрузке: ${res.status}`);
+                }
+
                 const data = await res.json();
                 setReservations(data.results || []);
             } catch (err) {
-                console.error("Error loading reservations:", err);
+                console.error("Ошибка загрузки бронирований:", err);
             }
         };
-        fetchReservations();
-        getUserByToken(accessToken).then((res) => setUserId(res));
 
+        fetchReservations();
+
+        getUserByToken(accessToken).then((res) => setUserId(res));
     }, [params.id]);
+
 
     const bookedDates = reservations.flatMap(res => {
         const start = new Date(res.start_date);
@@ -79,8 +92,8 @@ const Reservation = () => {
             console.error(err);
             if (err.status === 400) {
                 openOk("Error: selected dates are unavailable or invalid");
-            } else {
-                openOk("Unknown error while creating reservation");
+            } else if (err.status === 404) {
+                openOk("Apartment Not Found");
             }
         } finally {
             setLoading(false);

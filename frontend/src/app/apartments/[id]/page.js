@@ -27,17 +27,6 @@ const ApartmentDetailPage = () => {
         getUserByToken(accessToken).then(r => setUserId(r.user_id));
     }, [params?.id, router, accessToken]);
 
-    useEffect(() => {
-        console.log("apartment:", apartment);
-        console.log("userId:", userId, typeof userId);
-        console.log("landlordId:", apartment?.landlord?.id, typeof apartment?.landlord?.id);
-
-        if (apartment && userId && userId === apartment?.landlord?.id) {
-            console.log('✅ Пользователь = владелец квартиры');
-        } else {
-            console.log('❌ Условие не выполнено');
-        }
-    }, [apartment, userId]);
 
 
     if (loading && !userId) return <Loader/>;
