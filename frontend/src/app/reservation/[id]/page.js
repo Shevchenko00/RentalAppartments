@@ -12,6 +12,7 @@ import getCookie from "@/uttils/getCookie/getCookie";
 import {createReservation} from "@/api/reservationApi";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import {fetchApartment} from "@/api/apartmentsApi";
 
 const defaultModal = { open: false, message: "", confirmMode: false, onConfirm: null, onClose: null };
 
@@ -23,7 +24,7 @@ const Reservation = () => {
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const [userId, setUserId] = useState();
-
+    const [apartment, setApartment] = useState(null)
     const router = useRouter();
     const params = useParams();
     const accessToken = getCookie("access_token");
@@ -38,8 +39,7 @@ const Reservation = () => {
                 const res = await fetch(`${productApi}/reservations/booked_date/${params.id}/`);
 
                 if (res.status === 404) {
-                    // если апартамента нет → редиректим или показываем ошибку
-                    router.push('/404'); // можно сделать отдельную страницу 404
+                    router.push('/404');
                     return;
                 }
 
@@ -53,10 +53,13 @@ const Reservation = () => {
                 console.error("Ошибка загрузки бронирований:", err);
             }
         };
+        fetchApartment(params?.id, router, setApartment, setLoading);
+
 
         fetchReservations();
 
-        getUserByToken(accessToken).then((res) => setUserId(res));
+        getUserByToken(accessToken).then((res) => setUserId(res.user_id));
+        console.log(apartment)
     }, [params.id]);
 
 
@@ -100,6 +103,11 @@ const Reservation = () => {
         }
     };
     if (loading) return <Loader />;
+    useEffect(() => {
+        if (userId === apartment?.landlord?.id) {
+            router.push('/reservation');
+        }
+    }, [userId, apartment?.landlord?.id, router]);
 
     return (
         <div className={styles.container}>
