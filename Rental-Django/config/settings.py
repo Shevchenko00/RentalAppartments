@@ -128,11 +128,11 @@ if env.bool('DB', default=False):
     DATABASES = {
         'default': {
             'ENGINE': ("django.db.backends.postgresql"),
-            'NAME': env('DB_NAME', default='django_final_projects'),
-            'USER': env('DB_USER', default='root'),
-            'PASSWORD': env('DB_PASSWORD', default='akula123'),
-            'HOST': env('DB_HOST', default='localhost'),
-            'PORT': env('DB_PORT', default='3306'),
+            'NAME': env('DB_NAME'),
+            'USER': env('DB_USER'),
+            'PASSWORD': env('DB_PASSWORD'),
+            'HOST': env('DB_HOST'),
+            'PORT': env('DB_PORT'),
         }
     }
 else:
@@ -166,9 +166,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
+
+CORS_ALLOWED_ORIGINS = os.getenv("CORS_ORIGINS", "").split(",")
+
 CORS_ALLOW_CREDENTIALS = True
 
 LANGUAGE_CODE = 'en-us'
