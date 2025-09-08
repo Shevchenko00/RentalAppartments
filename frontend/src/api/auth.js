@@ -42,8 +42,9 @@ export async function registerUser({
             date_birth,
             is_landlord
         }),
-    });
+        credentials: 'include',
 
+    });
     const data = await res.json();
     if (!res.ok) throw data;
     return data;

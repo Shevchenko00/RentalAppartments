@@ -8,7 +8,6 @@ from apps.apartment.serializers.change_active import ChangeActiveSerializer
 from apps.apartment.serializers.apartment_serializer import ApartmentSerializer
 from apps.apartment.views.search_views import ApartmentFilter
 from apps.users.permissions.landlord_permissions import IsLandlordOwner
-from sqlalchemy.testing.suite.test_reflection import users
 
 
 class ApartmentCreateAPI(generics.CreateAPIView):
