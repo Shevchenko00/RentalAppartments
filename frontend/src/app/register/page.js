@@ -10,6 +10,7 @@ import Checkbox from "@/components/Checkbox/Checkbox";
 import convertCamelToSnake from "@/uttils/toSnakeCase/toSnakeCase"
 import {useRouter} from "next/navigation";
 import getCookie from "@/uttils/getCookie/getCookie";
+import {registerUser} from "@/api/auth";
 const RegisterPage = () => {
     const [errors, setErrors] = useState({});
     const [email, setEmail] = useState('');
@@ -49,12 +50,12 @@ const RegisterPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-
+        setIsSubmitting(true);
 
         const parsedFormData = {
             ...formData,
         };
+
         try {
             const result = registerSchema.safeParse(convertCamelToSnake(parsedFormData));
             if (!result.success) {
@@ -62,18 +63,26 @@ const RegisterPage = () => {
                 setErrors(fieldErrors);
                 return;
             }
-                setErrors({});
+
+            setErrors({});
+
+            const response = await registerUser(convertCamelToSnake(parsedFormData));
+            document.cookie = `access_token=${response.access_token}; path=/; max-age=3600`;
+            document.cookie = `refresh_token=${response.refresh_token}; path=/; max-age=604800`;
+            router.push('/apartments');
+
         } catch (err) {
-            console.log(convertCamelToSnake(parsedFormData))
+            console.log('Registration error:', err);
             if (typeof err === 'object' && err.detail) {
                 setJSONError(err);
             } else {
-                setJSONError({ detail: 'Unknown error while logging in.' });
+                setJSONError({ detail: 'Unknown error while registering.' });
             }
         } finally {
             setIsSubmitting(false);
         }
     };
+
     const isEmailValid = registerSchema.safeParse(formData).success;
     const isDisabled = !email || !password || isEmailValid || isSubmitting;
 

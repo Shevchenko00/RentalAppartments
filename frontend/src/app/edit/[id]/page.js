@@ -75,8 +75,6 @@ const ApartmentEdit = () => {
                 router.push(`/apartments/${params.id}`)
             );
         } catch (err) {
-            console.error(err);
-
             if (err.status === 401) {
                 try {
                     const refreshToken = getCookie("refresh_token");
@@ -91,7 +89,6 @@ const ApartmentEdit = () => {
                         router.push(`/apartments/${params.id}`)
                     );
                 } catch (refreshError) {
-                    console.error("Token refresh failed:", refreshError);
                     document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
                     document.cookie = 'refresh_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
                     router.push('/login');
@@ -110,7 +107,6 @@ const ApartmentEdit = () => {
                     await deleteApartment(params.id, accessToken);
                     openOk("Apartment deleted", () => router.push("/profile"));
                 } catch (err) {
-                    console.error(err);
                     openOk("Unknown error");
                 }
             }

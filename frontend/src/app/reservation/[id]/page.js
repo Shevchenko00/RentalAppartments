@@ -44,13 +44,13 @@ const Reservation = () => {
                 }
 
                 if (!res.ok) {
-                    throw new Error(`Ошибка при загрузке: ${res.status}`);
+                    throw new Error(`Error while loading: ${res.status}`);
                 }
 
                 const data = await res.json();
                 setReservations(data.results || []);
             } catch (err) {
-                console.error("Ошибка загрузки бронирований:", err);
+                console.error("Error while booking loading:", err);
             }
         };
         fetchApartment(params?.id, router, setApartment, setLoading);
@@ -59,7 +59,6 @@ const Reservation = () => {
         fetchReservations();
 
         getUserByToken(accessToken).then((res) => setUserId(res.user_id));
-        console.log(apartment)
     }, [params.id]);
 
 
@@ -92,7 +91,6 @@ const Reservation = () => {
                 router.push(`/apartments/${params.id}`)
             );
         } catch (err) {
-            console.error(err);
             if (err.status === 400) {
                 openOk("Error: selected dates are unavailable or invalid");
             } else if (err.status === 404) {

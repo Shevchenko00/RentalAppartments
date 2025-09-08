@@ -27,8 +27,6 @@ const Reservations = () => {
                 const data = await fetchLandlordReservations(accessToken);
                 setLandlordReservations(data);
             }
-        } catch (err) {
-            console.error(err);
         } finally {
             setLoading(false);
         }
@@ -43,7 +41,6 @@ const Reservations = () => {
             await approveReservation(reservationId, accessToken);
             fetchData();
         } catch (err) {
-            console.error(err);
             alert("Failed to approve reservation");
         }
     };
@@ -53,7 +50,6 @@ const Reservations = () => {
             await cancelReservation(reservationId, accessToken);
             fetchData();
         } catch (err) {
-            console.error(err);
             alert("Failed to cancel reservation");
         }
     };

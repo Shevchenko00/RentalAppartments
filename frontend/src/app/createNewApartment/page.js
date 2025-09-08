@@ -81,7 +81,7 @@ const CreateNewApartment = () => {
                         type="file"
                         name="titlePhoto"
                         accept="image/*"
-
+                        required
                     />
                 </label>
                 <label className={styles.label}>
@@ -91,6 +91,7 @@ const CreateNewApartment = () => {
                         type="file"
                         name="photos"
                         accept="image/*"
+                        required
                         multiple
                     />
                 </label>
