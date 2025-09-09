@@ -90,8 +90,8 @@ cd RentalAppartments
 #### 4. Access the app
 
 - Frontend: [http://localhost:3000](http://localhost:3000)
-- Django API: [http://localhost:8000](http://localhost:1212)
-- FastAPI : [http://localhost:8000](http://localhost:1515)
+- Django API: [http://localhost:1212](http://localhost:1212)
+- FastAPI : [http://localhost:1515](http://localhost:1515)
 
 ---
 
