@@ -101,56 +101,61 @@ const Profile = () => {
                 <p className={styles.infoItem}><strong>Name:</strong> {user.first_name} {user.last_name}</p>
                 <p className={styles.infoItem}><strong>Email:</strong> {user.email}</p>
                 <p className={styles.infoItem}><strong>Phone:</strong> {user.phone_number}</p>
-                <h1 className={styles.title}>My listings</h1>
-                <Button
-                    onclick={() => window.open('/createNewApartment/', '_blank')}
-                    text="Create new"
-                />
-                <div className={styles.publications}>
-                    {apartments.length ? apartments.map((apartments) => (
-                        <div key={apartments.id} className={styles.publicationCard}>
-                            <div className={styles.cardImage}>
-                                {apartments.title_photo !== null ?
-                                    <img src={apartments.title_photo} alt={apartments.title} /> :
-                                    <img src={apartments.photos[0]?.photo} alt={apartments.title}/>
-                            }
-
-                        </div>
-
-                            <h3>{apartments.title}</h3>
-                            <p>{apartments.description}</p>
-                            <div className={styles.actions}>
-                                <Button onclick={() => router.push(`/edit/${apartments.id}`)} text={'edit'} />
-                            </div>
-                        </div>
-                    )) :<div className={styles.noListing}>
-                        You don't have any listings
+                {user.is_landlord ? (
+                    <>
+                        <h1 className={styles.title}>My listings</h1>
                         <Button
                             onclick={() => window.open('/createNewApartment/', '_blank')}
                             text="Create new"
                         />
-                    </div>
-                    }
+                        <div className={styles.publications}>
+                            {apartments.length ? apartments.map((apartments) => (
+                                <div key={apartments.id} className={styles.publicationCard}>
+                                    <div className={styles.cardImage}>
+                                        {apartments.title_photo !== null ?
+                                            <img src={apartments.title_photo} alt={apartments.title} /> :
+                                            <img src={apartments.photos[0]?.photo} alt={apartments.title}/>
+                                        }
+                                    </div>
 
-                </div>
-                <div className={styles.pagination}>
-                    <button
-                        disabled={!previous}
-                        onClick={() => setPage(p => Math.max(1, p - 1))}
-                    >
-                        Prev
-                    </button>
+                                    <h3>{apartments.title}</h3>
+                                    <p>{apartments.description}</p>
+                                    <div className={styles.actions}>
+                                        <Button onclick={() => router.push(`/edit/${apartments.id}`)} text={'edit'} />
+                                    </div>
+                                </div>
+                            )) : (
+                                <div className={styles.noListing}>
+                                    You don't have any listings
+                                    <Button
+                                        onclick={() => window.open('/createNewApartment/', '_blank')}
+                                        text="Create new"
+                                    />
+                                </div>
+                            )}
+                        </div>
 
-                    <span>{page} / {Math.ceil(count / 10)}</span>
+                        <div className={styles.pagination}>
+                            <button
+                                disabled={!previous}
+                                onClick={() => setPage(p => Math.max(1, p - 1))}
+                            >
+                                Prev
+                            </button>
 
-                    <button
-                        disabled={!next}
-                        onClick={() => setPage(p => Math.max(1, p + 1))}
-                    >
-                        Next
-                    </button>
+                            <span>{page} / {Math.ceil(count / 10)}</span>
 
-                </div>
+                            <button
+                                disabled={!next}
+                                onClick={() => setPage(p => Math.max(1, p + 1))}
+                            >
+                                Next
+                            </button>
+                        </div>
+                    </>
+                ) : (
+                    <h1></h1>
+                )}
             </div>
         </>
     );

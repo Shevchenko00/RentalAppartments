@@ -59,7 +59,7 @@ class UserPublicSchema(BaseModel):
     first_name: Optional[str]
     last_name: Optional[str]
     phone_number: Optional[str]
-
+    is_landlord: Optional[bool]
 
     class Config:
         orm_mode = True
